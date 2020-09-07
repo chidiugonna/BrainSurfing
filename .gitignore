@@ -1,3 +1,52 @@
+# mkdocs
+site/
+
+#specific files
+todo.md
+
+#data folders and files
+scripts/
+library/
+data/
+DATA/
+exampleData/
+*.jpg
+*.png
+*.gz
+*.dat
+*.h5
+*.hdr
+*.img
+*.nii
+*.gii
+*.nii.gz
+*.spec
+*.gii
+*.dcm
+*.ICA
+*.mgz
+*.mgh
+*.mat
+
+#tesoutout folders
+testout/
+results/
+
+#singularity sandboxes
+*sandbox
+
+#singularity files
+*.simg
+*.sif
+
+#build files
+*.bpy
+*.bsh
+*.token
+
+#log files
+*.log
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

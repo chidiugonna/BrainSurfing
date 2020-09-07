@@ -1,0 +1,21 @@
+site_name: BrainSurfing
+nav:
+    - Home: index.md
+    - About: about.md
+    - 'Surface Formats':
+        - 'Introduction to Surface-based Formats' : surfdata/introformats.md
+        - 'Freesurfer Pipeline' : surfdata/freesurfer.md
+        - 'nifti': surfdata/nifti.md
+        - 'gifti': surfdata/gifti.md
+        - 'nifti-2': surfdata/nifti2.md
+        - 'cifti': surfdata/cifti.md
+        - 'practicum 8.1' : surfdata/prac81.md
+    - 'Surface Analysis':
+        - 'Working with Surface-based formats' : surfanalysis/working.md
+        - 'registration' : surfanalysis/reg.md
+        - 'practicum 9.1' : surfanalysis/prac91.md
+theme: readthedocs
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
