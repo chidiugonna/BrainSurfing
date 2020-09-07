@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>cifti - BrainSurfing</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "cifti";
+    var mkdocs_page_input_path = "surfdata/cifti.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> BrainSurfing</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../about/">About</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Surface Formats</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../introformats/">Introduction to Surface-based Formats</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../freesurfer/">Freesurfer Pipeline</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../nifti/">nifti</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../gifti/">gifti</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../nifti2/">nifti-2</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">cifti</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#data">Data</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#python">Python</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#matlab">Matlab</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#approach-1-for-hcp-meg-data">Approach 1 : For HCP MEG data</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#approach-2-for-hcp-mri-data">Approach 2 : For HCP MRI data</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#approach-3-alpha-testing-for-hcp-mri-data">Approach 3: Alpha Testing for HCP MRI Data</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#container">Container</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#problems-with-opening-wb_view-using-docker-on-gpu-enabled-computer">Problems with opening wb_view using Docker on gpu enabled computer</a>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../prac81/">practicum 8.1</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Surface Analysis</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../surfanalysis/working/">Working with Surface-based formats</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../surfanalysis/reg/">registration</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../surfanalysis/prac91/">practicum 9.1</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">BrainSurfing</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Surface Formats &raquo;</li>
+        
+      
+    
+    <li>cifti</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="cifti">Cifti</h1>
+<h2 id="data">Data</h2>
+<p>An assortment of CIFTI and GIFTI files are available from OSF:
+If you have the python client <code>osfclient</code> installed then use:</p>
+<pre><code>osf -p hetgq fetch /Data/HCP .
+</code></pre>
+<h2 id="python">Python</h2>
+<p>Possible free jupyter option is https://colab.research.google.com </p>
+<h2 id="matlab">Matlab</h2>
+<p>There are libraries available in matlab for working with CIFTI.</p>
+<p>This <a href="https://wiki.humanconnectome.org/display/PublicData/HCP+Users+FAQ#HCPUsersFAQ-2.HowdoyougetCIFTIfilesintoMATLAB?">FAQ</a> from the Human Connectome Project provides 3 approaches for loading CIFTI files. For HCP </p>
+<h3 id="approach-1-for-hcp-meg-data">Approach 1 : For HCP MEG data</h3>
+<p>The FieldTrip <a href="http://www.fieldtriptoolbox.org/download/">toolbox</a> provides a matlab library for working with CIFTI files. It is for use with HCP MEG Data. It is not advised for use with MRI data because it pads the CIFTI matrix with <strong>NaN</strong> values however it is a completely independent library. The field trip toolbox functions are prefixed by <code>ft_</code> as in <a href="http://www.fieldtriptoolbox.org/reference/ft_read_cifti/"><code>ft_read_cifti</code></a></p>
+<h3 id="approach-2-for-hcp-mri-data">Approach 2 : For HCP MRI data</h3>
+<p>From the <a href="https://wiki.humanconnectome.org/display/PublicData/HCP+Users+FAQ#HCPUsersFAQ-2.HowdoyougetCIFTIfilesintoMATLAB?">HCP FAQ</a> download just the following 3 matlab functions <a href="https://wiki.humanconnectome.org/download/attachments/63078513/ciftiopen.m?version=5&amp;modificationDate=1543341721133&amp;api=v2">ciftiopen.m</a>,<a href="https://wiki.humanconnectome.org/download/attachments/63078513/ciftisave.m?version=4&amp;modificationDate=1543341731171&amp;api=v2">ciftisave.m</a> and <a href="https://wiki.humanconnectome.org/download/attachments/63078513/ciftisavereset.m?version=2&amp;modificationDate=1543341735194&amp;api=v2">ciftisavereset.m</a> and place in your path.</p>
+<p>You will need need the gifti matlab library as well. You can download a release version <code>gifti-zip</code>from <a href="https://www.artefact.tk/software/matlab/gifti/">here</a>. Unzip to a folder and in matlab add to your path as <code>addpath /path/to/gifti</code></p>
+<p>We will also need access to <code>wb_command</code></p>
+<h3 id="approach-3-alpha-testing-for-hcp-mri-data">Approach 3: Alpha Testing for HCP MRI Data</h3>
+<p>This <a href="https://github.com/Washington-University/cifti-matlab.git">library</a>  is in alpha testing phase and is based on the <code>Field Trip</code> fieldbox. It should resolve the issues with <strong>Approach 1</strong> but it is still strictly in development and so changes are possible. The field trip library that it is based on is also included in subfolder <code>ft_cifti</code></p>
+<p>For this exploration we will proceed with <strong>Approach 3</strong> </p>
+<p><code>git clone https://github.com/Washington-University/cifti-matlab.git</code></p>
+<h2 id="container">Container</h2>
+<p>Singularity and Docker containers with the HCP Workbench are available for exploring CIFTI data.</p>
+<p>The singularity image can be run as follows:</p>
+<p><code>singularity run --nv -B $PWD:/mnt workbench.sif --homedir /mnt wb_view</code></p>
+<p>The docker image can be run as</p>
+<p><code>docker run --rm --user=developer -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME/.Xauthority:/home/developer/.Xauthority -it --net=host --pid=host --ipc=host aacazxnat/workbench:0.1 wb_view</code></p>
+<h2 id="problems-with-opening-wb_view-using-docker-on-gpu-enabled-computer">Problems with opening wb_view using Docker on gpu enabled computer</h2>
+<p>You will need to add Nvidia-Docker to your system. See <a href="https://github.com/NVIDIA/nvidia-docker">Github</a> for instructions for installation which are replicated below:</p>
+<pre><code>distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list |     sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+
+sudo apt-get update &amp;&amp; sudo apt-get install -y nvidia-container-toolkit
+sudo systemctl restart docker
+</code></pre>
+<p>Test nvidia-smi with the latest official CUDA image</p>
+<pre><code> docker run --gpus all nvidia/cuda:10.2-base nvidia-smi
+</code></pre>
+<p>Now try the gpu image:</p>
+<p><code>docker run --gpus all --rm --user=developer -e DISPLAY=$DISPLAY -v /usr/lib/nvidia:/usr/lib/nvidia -v /tmp/.X11-unix:/tmp/.X11-unix -v $HOME:/mnt -v $HOME/.Xauthority:/home/developer/.Xauthority -it --net=host --pid=host  --device /dev/dri  --ipc=host --privileged aacazxnat/workbenchgpu_runtime:0.1 --homedir /mnt wb_view</code></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../prac81/" class="btn btn-neutral float-right" title="practicum 8.1">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../nifti2/" class="btn btn-neutral" title="nifti-2"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../nifti2/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../prac81/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
