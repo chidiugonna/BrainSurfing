@@ -1,12 +1,17 @@
 # mkdocs
 site/
 
+#General folders
+Archives/
+references/
+
 #specific files
 todo.md
 
 #data folders and files
+*.pdf
 scripts/
-library/
+matlab-library/
 data/
 DATA/
 exampleData/

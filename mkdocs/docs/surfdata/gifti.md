@@ -1,1 +1,0 @@
-../../../surfdata/gifti.md

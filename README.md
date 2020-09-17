@@ -1,4 +1,5 @@
 # <div align="center"> MRI Brain Surfing </div>
+<div align="center">  ![brainsurficon](https://github.com/chidiugonna/BrainSurfing/blob/gh-pages/img/favicon.ico) </div>
 
 An introduction to Surface formats and Surface analysis methods for MR brain images written to support [**Computing for Neuroimagers** (SLHS 497/597)](https://d2l.arizona.edu/d2l/home/924931) run at the University of Arizona in Fall 2020.
 

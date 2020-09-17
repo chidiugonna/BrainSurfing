@@ -14,7 +14,7 @@ Links to the documentation for the lessons are provided below:
 
 ***
 
-[Lesson 9](surfanalysis/working.md): Working with Surface-based formats
+[Lesson 9](surfanalysis/introanalysis.md): Working with Surface-based formats
 
 [Practicum 9.1](surfanalysis/prac91.md): Surface-Based Analysis
 
