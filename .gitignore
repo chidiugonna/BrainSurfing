@@ -4,16 +4,20 @@ site/
 #General folders
 Archives/
 references/
+software/
+presentation/
 
 #specific files
 todo.md
 
 #data folders and files
 *.pdf
+*.xml
 scripts/
 matlab-library/
 data/
 DATA/
+DATABACK/
 exampleData/
 *.jpg
 *.png

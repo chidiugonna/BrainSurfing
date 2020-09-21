@@ -1,9 +1,9 @@
 %  add GIFTI release library to path
-addpath ../../matlab-library/gifti-release
+addpath ./matlab-library/gifti-release
 
 %% A. Open HCP Native lh pial mesh and cortical thickness overlay
 % read and view the GIFTI surface mesh
-mysurf='../../DATA/HCP/100307/MNINonLinear/Native/100307.L.pial.native.surf.gii';
+mysurf='./DATA/HCP/100307/MNINonLinear/Native/100307.L.pial.native.surf.gii';
 fprintf('Reading Surface %s\n',mysurf);
 mysurfleft_mesh = gifti(mysurf);
 fprintf('Surface has %d faces\n',size(mysurfleft_mesh.faces,1));
@@ -11,7 +11,7 @@ fprintf('Surface has %d vertices\n',size(mysurfleft_mesh.vertices,1));
 % view the right surface
 figure; plot(mysurfleft_mesh)
 
-myoverlay='../../DATA/HCP/100307/MNINonLinear/Native/100307.L.thickness.native.shape.gii';
+myoverlay='./DATA/HCP/100307/MNINonLinear/Native/100307.L.thickness.native.shape.gii';
 fprintf('Reading Overlay %s\n',myoverlay);
 myoverlayleft = gifti(myoverlay);
 fprintf('Overlay has %d values\n',size(myoverlayleft.cdata,1));
@@ -108,7 +108,7 @@ system('firefox mygiftioverlay_allxml.gii')
 
 % we will need the xml2struct library to read the xml which can 
 % obtained from https://www.mathworks.com/matlabcentral/fileexchange/28518-xml2struct
-addpath ../../matlab-library/xml2struct
+addpath ./matlab-library/xml2struct
 
 % To read XML we may need to remove the DOCTYPE line in the xml - this
 % caused errors with my version of matlab 

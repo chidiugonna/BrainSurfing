@@ -1,18 +1,28 @@
+clear
+close all
+clc
+%%
 % add path to HCP cifti-matlab library - in alpha testing stage
-addpath ../../matlab-library/cifti-matlab
+addpath ./matlab-library/cifti-matlab
 
 % addpath to FieldTrip
-addpath ../../matlab-library/cifti-matlab/ft_cifti
+addpath ./matlab-library/cifti-matlab/ft_cifti
 
 %  add GIFTI release library to path
-addpath ../../matlab-library/gifti-release
+addpath ./matlab-library/gifti-release
 
 % add path to xml2struct
-addpath ../../matlab-library/xml2struct
-%% A : Read CIFTI dscalar of L and R Cortex
+addpath ./matlab-library/xml2struct
+%% A : Brief look at NIFTI-2 Header and Read CIFTI dscalar of L and R Cortex
 
 % cifti overlay for cortical thickness - has both L and R cortex values
-ciftioverlay='../../DATA/HCP/100307/MNINonLinear/Native/100307.thickness.native.dscalar.nii';
+ciftioverlay='./DATA/HCP/100307/MNINonLinear/Native/100307.thickness.native.dscalar.nii';
+
+filesize=getfilesize(ciftioverlay)
+fprintf('The CIFTI file is %d bytes in size',filesize);
+nii2 = read_nifti2_hdr(ciftioverlay)
+[exts, extents] = get_nifti2_extents(ciftioverlay)
+
 ciiall = traverse_cifti(ciftioverlay);
 ciixml = get_cifti_xml(ciftioverlay);
 %run code below on windows
@@ -29,7 +39,7 @@ medialverts = setdiff(totverts, visverts)
 
 %% C load associated surface and find all the vertices connected and confirm with visualization
 % to a particular vertex 119115
-mysurf='../../DATA/HCP/100307/MNINonLinear/Native/100307.L.midthickness.native.surf.gii';
+mysurf='./DATA/HCP/100307/MNINonLinear/Native/100307.L.midthickness.native.surf.gii';
 [neighbors,neighmatlab, allverts, allvertmatlab]=get_neighbors(mysurf, 119115);
 visverts=ciiall.diminfo{1}.models{1}.vertlist;
 neighindex=ismember(visverts,allverts);
@@ -44,14 +54,14 @@ cifti_write(ciiall,'amended.100307.thickness.native.dscalar.nii')
 
 %% E: Read CIFTI dtseries of L, R Cortex and Sub-Cortical structures on subsampled mesh
 %
-ciftioverlay='../../DATA/HCP/100307/MNINonLinear/Results/rfMRI_REST1_LR/rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii';
+ciftioverlay='./DATA/HCP/100307/MNINonLinear/Results/rfMRI_REST1_LR/rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii';
 %ciftioverlay='amended.Atlas_hp_preclean.dtseries.nii'
 ciiall = traverse_cifti(ciftioverlay);
 ciixml = get_cifti_xml(ciftioverlay);
 
-%% F Find neighbors to vertex 17617 
+%% F1 Find neighbors to vertex 17617 
 %
-mysurf='../../DATA/HCP/100307/MNINonLinear/fsaverage_LR32k/100307.R.midthickness.32k_fs_LR.surf.gii';
+mysurf='./DATA/HCP/100307/MNINonLinear/fsaverage_LR32k/100307.R.midthickness.32k_fs_LR.surf.gii';
 [neighbors,neighmatlab, allverts, allvertmatlab]=get_neighbors(mysurf, 17617);
 visverts=ciiall.diminfo{1}.models{2}.vertlist;
 neighindex=ismember(visverts,allverts);
@@ -59,20 +69,99 @@ neighindex=ismember(visverts,allverts);
 findneighbors=find(neighindex);
 
 %offset into Right Hemosphere
-findRHneighbors=findneighbors + ciiall.diminfo{1}.models{2}.start;
+findRHneighbors=findneighbors + ciiall.diminfo{1}.models{2}.start -1;
+figure;
 plot(ciiall.cdata(findRHneighbors,:)')
 
+%% F2 Find neighbors to vertex 8470
+%
+mysurf='./DATA/HCP/100307/MNINonLinear/fsaverage_LR32k/100307.R.midthickness.32k_fs_LR.surf.gii';
+[neighborsA,neighmatlabA, allvertsA, allvertmatlabA]=get_neighbors(mysurf, 8470);
+visvertsA=ciiall.diminfo{1}.models{2}.vertlist;
+neighindexA=ismember(visvertsA,allvertsA);
+
+findneighborsA=find(neighindexA);
+
+%offset into Right Hemosphere
+findRHneighborsA=findneighborsA + ciiall.diminfo{1}.models{2}.start -1;
+figure;
+plot(ciiall.cdata(findRHneighborsA,:)')
+
+
 %% G Find neighbors to voxel 
+% left Hippocampus is represented by model 14
+ciiall.diminfo{1}.models{14}
+
+%The list of voxels are in voxlist
+ciiall.diminfo{1}.models{14}.voxlist
+
+% range of voxel coordinates
+xrange=[min(ciiall.diminfo{1}.models{14}.voxlist(1,:)) max(ciiall.diminfo{1}.models{14}.voxlist(1,:))]
+yrange=[min(ciiall.diminfo{1}.models{14}.voxlist(2,:)) max(ciiall.diminfo{1}.models{14}.voxlist(2,:))]
+zrange=[min(ciiall.diminfo{1}.models{14}.voxlist(3,:)) max(ciiall.diminfo{1}.models{14}.voxlist(3,:))]
+
+% choosing 55,56,30 and find neighbors
+XO=56; YO=56; ZO=25
+
+voxexists=sum(ismember(ciiall.diminfo{1}.models{14}.voxlist', [XO YO ZO], 'rows'));
+
+if ~voxexists 
+    fprintf('Your choice of voxel %d,%d,%d is not in the structure. You may not find valid neighbors.\n',XO,YO,ZO)
+else
+    fprintf('Your choice of voxel %d,%d,%d is present in the structure.\n',XO,YO,ZO)
+end
+
+[X,Y,Z] = meshgrid(-1:1,-1:1,-1:1)
+XX=X(:)+XO
+YY=Y(:)+YO
+ZZ=Z(:)+ZO
+
+neighvoxes=[XX YY ZZ]
+voxneighindex=ismember(ciiall.diminfo{1}.models{14}.voxlist', neighvoxes, 'rows');
+fprintf('found %d neighbors to chosen voxel\n',sum(voxneighindex) - 1)
+findvoxneighbors=find(voxneighindex);
+
+ciiall.diminfo{1}.models{14}.voxlist(:,findvoxneighbors)'
+
+%offset into Hippocampus
+findHipponeighbors=findvoxneighbors + ciiall.diminfo{1}.models{14}.start - 1;
+figure;
+plot(ciiall.cdata(findHipponeighbors,:)')
 
 
-%% H Create Functional dead zone in Right Cortex and save
-%null out
+%% H Create Functionally connected zone in Right Cortex (17617) to aother vertex in right cortex (8470) 
+% Remember that 8470 is indexed as 38167 in cdata (i.e. ciiall.diminfo{1}.models{2}.start + 8470)
+%
+
+% simulate fMRI signal
+signalprint=15000 + 700*rand(1,1200);
+
 newcdata=ciiall.cdata;
-newcdata(findRHneighbors,:)=zeros(size(findRHneighbors,2),1200);
+
+%copy signal into vertex 17617 and neighbors
+newcdata(findRHneighbors,:)=ones(length(findRHneighbors),1200).*signalprint;
+
+% copy signal into voxel 8470 and neighbors
+newcdata(findRHneighborsA,:)=ones(length(findRHneighborsA),1200).*signalprint;
+
+% copy signal into L Hippo voxel and neighbors
+newcdata(findHipponeighbors,:)=ones(length(findHipponeighbors),1200).*signalprint;
+
+%% I Save Cifti
+%
 ciftinew = cifti_struct_create_from_template(ciiall, newcdata, 'dtseries','start',0,'step',1,'unit', 'SECOND'); 
 ciftisave(ciftinew,'amended.rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii')
 
-%% Opens a Cifti file and does a quick traverse of the data 
+
+%%  Helper Functions are Defined below
+% 
+%
+%
+%
+%
+%% traverse_cifti : Opens a Cifti file and does a quick traverse of the data 
+%
+%
 %
 function ciiall = traverse_cifti(ciftifile)
 
@@ -126,7 +215,7 @@ end
 end
 
 
-%% Function - looks at the Cifti XML
+%% get_cifti_xml: looks at the Cifti XML
 % lets view the xml using ft_open_read in the FieldTrip library
 
 function ciixml = get_cifti_xml(ciftifile, varargin)
@@ -146,7 +235,7 @@ end
 
 end
 
-%% Function - gets vertex neighbours
+%% get_neighbors: gets vertex neighbours
 %
 function [neighborscifti, neighbors, allvertscifti, allverts] = get_neighbors(mysurf, vertexind)
 
@@ -192,4 +281,25 @@ neighborscifti=neighbors - 1;
 fprintf('The vertices (using Cifti indices) neighboring %d are:\n', ciftivind);
 fprintf('%d ',neighborscifti);
 fprintf('\n');
+end
+
+%% get file size
+%
+function filesize = getfilesize(IMAGE1) 
+fid = fopen(IMAGE1);
+fseek(fid, 0, 'eof');
+filesize = ftell(fid)
+fclose(fid);
+end
+
+
+%% get nifti extents
+%
+% read extent codes
+function [exts, extent]=get_nifti2_extents(IMAGE1)
+fid = fopen(IMAGE1);
+hdr = fread(fid,540,'char');
+exts = fread(fid,4,'char');
+extent = fread(fid,2,'int32');
+fclose(fid);
 end
