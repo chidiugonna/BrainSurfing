@@ -155,7 +155,8 @@
     ├── read_nifti2_hdr.m
     ├── task_002_giftisurf.m
     ├── task_003_giftioverlay.m
-    └── task_004_cifti.m
+    ├── task_004_cifti.m
+    └── task_005_cifti.m
 </code></pre>
 <h2 id="provenance">Provenance</h2>
 <h3 id="matlab-libraries">Matlab libraries</h3>
@@ -175,7 +176,7 @@
 <p>We will be using a subset of data from the Human Connectome Project's Young Adult (YA) <a href="https://db.humanconnectome.org/data/projects/HCP_1200">1200 Subject Release</a>. Specifically data from subject 100307. The HCP has terms of reference for using their data. To use HCP data please sign on to the <a href="https://db.humanconnectome.org">HCP website</a> and register for free. </p>
 <h2 id="task-1-use-wb_view-to-visualize-gifti-surfaces">Task 1: Use wb_view to visualize GIFTI surfaces</h2>
 <ul>
-<li>Open wb_view either by double-clicking the <code>wb_view</code> or <code>wb_view.exe</code>  icon in your windows manager or by entering this in the command line if you have set up your paths in the the command line interface correctly.</li>
+<li>Open wb_view either by double-clicking the <code>wb_view</code> or <code>wb_view.exe</code>  icon in your windows manager or by entering this in the command line if you have set up your paths in the command line interface correctly.</li>
 <li>When <strong>wb_view</strong> opens click the  <code>skip</code> button in the dialog to get to the main screen</li>
 <li>From the top menu choose <code>File</code> &gt; <code>Open File</code> and change the dropdown on <code>Files of type:</code> to <code>Surface Files (*.surf.gii)</code></li>
 <li>Now navigate to <code>Practicum81/DATA/HCP/100307/MNINonLinear/Native/</code></li>
@@ -227,13 +228,13 @@
 <h2 id="task-2-use-matlab-to-manipulate-gifti-surfaces">Task 2: Use Matlab to manipulate GIFTI Surfaces</h2>
 <ul>
 <li>
-<p>In this task we will be loading in the GIFTI surface <code>100307.L.pial.native.surf.gii</code> which we visualized above and identifying the vertex and vertex neighbours we identified. We will then change the local topology of the surface by nudging these vertices by a random 3D translation and then save a new copy of the surface which we will visualize again using <strong>wb_view</strong>.</p>
+<p>In this task we will be loading in the GIFTI surface <code>100307.L.pial.native.surf.gii</code> which we visualized above and identifying the vertex and vertex neighbours we chose. We will then change the local topology of the surface by nudging these vertices by a random 3D translation and then save a new copy of the surface which we will visualize again using <strong>wb_view</strong>.</p>
 </li>
 <li>
 <p>Open matlab and navigate to your the  <code>practicum81</code>  folder containing <code>task_002_giftisurf.m</code>. Double click this file to open it in matlab.</p>
 </li>
 <li>
-<p>We will run individual sections of the matlab code by right clicking on each section (highlighted ted yellow when selected) and selecting <code>Evaluate Current Section</code>. </p>
+<p>We will run individual sections of the matlab code by right clicking on each section (highlighted yellow when selected) and selecting <code>Evaluate Current Section</code>. </p>
 </li>
 <li>
 <p>Select the 1st section and choose <code>Evaluate Current Selection</code> to run. This will ensure that matlab can find the gifti-release library which we need to open and save GIFTI files.</p>
@@ -242,7 +243,7 @@
 <p><img alt="select all vertices" src="../../img/task2_01_matlab_addlib.png" /></p>
 <ul>
 <li>
-<p>If you haven't set right path to your library (or your library doesn't exist yet) you will see an error like this:</p>
+<p>If you haven't set the right path to the gifti-release library then you will see an error like this:</p>
 <pre><code>Warning: Name is nonexistent or not a directory /home/chidi/Downloads/    Practicum81/../matlab-library/gifti-release
 </code></pre>
 </li>
@@ -277,12 +278,12 @@ Cannot read XML document
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>One source of potential confusion is that <strong>Matlab</strong> indexes vertices starting from 1 but <strong>wb_view</strong> and the GIFTI specification start indexing from 0. </p>
+<p>One source of potential confusion is that the <strong>gifti matlab</strong> library indexes vertices starting from 1 but <strong>wb_view</strong> and the GIFTI specification start indexing from 0. </p>
 <p>So the 1st vertex has an index of 0 in <strong>wb_view</strong> but has an index value of 1 in <strong>matlab</strong>.</p>
 </div>
 <ul>
 <li>
-<p>The <code>faces</code> matrix contains the 3 vertex indices that are joined togeher to form a face on each row. Looking at the first 4 faces we can see that vertices 1,2 and 3 are joined together to form a face. Perhaps surprisingly we see that 56 and 57 are also joined to 2 to form a face. Remember that this uses matlab's indexing conventions. So wb_view would specify the first face as consisting of vertices 0,1 and 2.</p>
+<p>The <code>faces</code> matrix contains the 3 vertex indices that are joined togeher to form a face on each row. Looking at the first 4 faces we can see that vertices 1,2 and 3 are joined together to form a face. Perhaps surprisingly we see that 56 and 57 are also joined to 2 to form a face. This reinforces the fact that the vertex index is just a label and does not predict spatial proximity. Remember that this uses matlab's indexing conventions. So wb_view would specify the first face as consisting of vertices 0,1 and 2.</p>
 <pre><code>mysurfleft_mesh.faces(1:4,:)
 
     1    2    3
@@ -302,14 +303,14 @@ Cannot read XML document
 </code></pre>
 </li>
 <li>
-<p>Now run the next section <strong>B</strong> to find the neighbours of the vertex you located in task 1 above. Remember to change the vertex on line 21 <code>ciftivind=</code> to point to your vertex. If all goes well then you should see the same vertices you observed in <code>wb_view</code>. One thing to note is that  <code>wb_view</code> (and in fact the GIFTI XML also) starts indexing vertices from 0 while matlab starts indexing from 1. So we have had to add 1 to our index to create the correct index for use in matlab.</p>
+<p>Now run the next section <strong>B</strong> to find the neighbours of the vertex you located in task 1 above. Remember to change the vertex on line 21 <code>ciftivind=</code> to point to your vertex. If all goes well then you should see the same vertices you observed in <strong>wb_view</strong>. As already mentioned  <strong>wb_view</strong> (and the GIFTI XML) start indexing vertices from 0 while the <strong>gifti matlab library</strong> starts indexing from 1. So we need to add 1 to the index we obtained from <strong>wb_view</strong> to create the correct index for use in matlab.</p>
 <pre><code>matlabvind=ciftivind + 1;
 </code></pre>
 </li>
 </ul>
 <p><img alt="select all vertices" src="../../img/task2_findvertices.png" /></p>
 <ul>
-<li>The code logic looks at all the columns of the faces matrix and picks out the lines that include our vertex and then does a union to create a set of vertices without duplication. The faces matrix contains a row for every triangular face. So below for example the vertices 119116, 119106 and 119115 are connected as a face.</li>
+<li>The code looks at all the columns of the faces matrix and picks out the lines that include our vertex and then does a union to create a set of vertices without duplication. The faces matrix contains a row for every triangular face. So below for example the vertices 119116, 119106 and 119115 are connected as a face.</li>
 </ul>
 <p>Find 119116 in column 1:</p>
 <pre><code>       119116   119106   119115
@@ -335,6 +336,9 @@ Cannot read XML document
 <ul>
 <li>
 <p>This code goes through a loop and for each vertex obtains the x, y and z anatomical location information and perturbs it by a random number. We then create a new GIFTI file called <code>amended.100307.L.pial.native.surf.gii</code> in your current folder which contains the changed vertex locations in a new surface.</p>
+</li>
+<li>
+<p>Now we will return to <strong>wb_view</strong> to view your new GIFTI file.</p>
 </li>
 <li>
 <p>Open your amended GIFTI surface <code>amended.100307.L.pial.native.surf.gii</code> that was created in the <code>Practicum81</code> folder in wb_view</p>
@@ -374,22 +378,25 @@ Cannot read XML document
 </ul>
 <p><img alt="select surfaces" src="../../img/task2_amendedsurface.png" /></p>
 <ul>
-<li>You can contrast this with the original by clicking back and forth  on the dropdown in the tab (under <code>Brain Structure and Surface</code>) switching between the original surface and your amended or by clicking on a Montage window to see both surfaces side by side. You should confirm that you have successfully change the topology of your surface.</li>
+<li>You can contrast this with the original by clicking back and forth  on the dropdown in the tab (under <code>Brain Structure and Surface</code>) switching between the original surface and your amended surface.</li>
 </ul>
 <p><img alt="select surfaces" src="../../img/task2_leftpialoriginalview.png" /></p>
+<ul>
+<li>You can also click on a Montage view to see both surfaces side by side (You will need to deselect either the medial or lateral checkbox to see the vertex and neighbours properly side by side). You should confirm that you have successfully change the topology of your surface.</li>
+</ul>
 <p><img alt="select surfaces" src="../../img/task2_montagecompare.png" /></p>
 <ul>
 <li>
-<p>We won't dwell too long on the next two sections but these sections give you more insight into the XML structure of the GIFTI structure so that you can compare that with the data provided by the <code>gifti-matlab</code> library. Essentially this library just reads this XML in the GIFTI to create the <code>faces</code> and <code>vertices</code> structures that you have just looked at.</p>
+<p>We won't dwell too long on the next two sections but these sections give you more insight into the XML structure of the GIFTI structure so that you can compare that with the data provided by the <strong>gifti matlab</strong> library. Essentially this library just reads this XML in the GIFTI to create the <code>faces</code> and <code>vertices</code> structures that you have just looked at.</p>
 </li>
 <li>
-<p>We will to the matlab file to run <strong>section D</strong> in the matlab file to view the GIFTI metadata in a browser to see exactly how the XML is used to represent the GIFTI format. If you don't have firefox installed on your machine then replace <code>firefox</code> with  the name of your installed browser.  You will need to have the browser on your path.</p>
+<p>We will return to the matlab file to run <strong>section D</strong>  to view the GIFTI metadata in a browser to see exactly how the XML is used to represent the GIFTI format. If you don't have firefox installed on your machine then replace <code>firefox</code> with  the name of your installed browser.  You will need to have the browser on your path. If it is not then replace <code>firefox</code> with the full path e.g. <code>/usr/bin/firefox</code></p>
 <pre><code>system('firefox mygifti_allxml.gii')
 </code></pre>
 </li>
 <li>
 <p>if you don't have the browser on your path you will get a message like this:</p>
-<pre><code>'firefox.exe' is not recognized as an internal or external command. operable program or batch file.
+<pre><code>'firefox' is not recognized as an internal or external command. operable program or batch file.
 </code></pre>
 </li>
 <li>
@@ -413,7 +420,7 @@ Cannot read XML document
 <p><strong>Section E</strong> accomplishes the same as Section D except that now the xml data is loaded into a matlab structure. You can skip this section as all it does is corroborate what you have already seen above. It is divided into 2 parts, <strong>E1</strong> and <strong>E2</strong></p>
 </li>
 <li>
-<p>Run Section <strong>E1</strong> to fix the xml in the GIFTI. We need to do this as unfortunately there is a slight problem reading the XML file into matlab as the 2nd line which starts <code>&lt;!DOCTYPE</code> causes problems with the parser. The line <code>sed 2d...</code> in the matlab file is written to delete this line on unix and save a new text file called <code>mygifti_xml.gii</code> which is then parsed. In windows you will have to use <code>powershell</code> if its available or alternatively manually open the xml file in a text processor and delete the 2nd line. In matlab you can invoke a powershell shell as follows:</p>
+<p>Run Section <strong>E1</strong> to fix the xml in the GIFTI. We need to do this as unfortunately there is a slight problem reading the XML file into matlab as the 2nd line which starts <code>&lt;!DOCTYPE</code> causes problems with the parser. The line <code>sed 2d...</code> in the matlab file is written to delete this line on unix and save a new text file called <code>mygifti_xml.gii</code> which is then parsed. In windows you will need to comment out this line and use <code>powershell</code> if its available or alternatively manually open the xml file in a text processor and delete the 2nd line. In matlab you can invoke a powershell shell as follows:</p>
 <pre><code>!powershell
 </code></pre>
 </li>
@@ -437,11 +444,15 @@ Text: '0 3 0 56 0 0 1 1 2 2 2 72 3 3 4 4 6 14 6 6 6 11
 <h2 id="task-3-use-matlab-to-manipulate-and-visualize-gifti-overlays">Task 3: Use Matlab to manipulate and visualize GIFTI overlays</h2>
 <p>We have been able to work with and manipulate <strong>GIFTI surface files</strong>. In this task we will now look at an example of a <strong>GIFTI overlay</strong> that maps cortical thickness  values onto the pial vertices and we will attempt to manipulate and visualize this overlay.</p>
 <ul>
-<li>If *<em>wb_view</em>8 is open then choose <code>File</code> &gt; <code>Close all files</code> and answer yes to remove all files and start from scratch.</li>
+<li>If <strong>wb_view</strong> is already open from previous tasks then you can use the <code>File</code> &gt; <code>Save/Manage Files</code> functionality to selectively close files. Select to close the Right Pial and the amended Left pial. We will be using the original Left pial in this task.</li>
+</ul>
+<p><img alt="select surfaces" src="../../img/task2_closeselect.png" /></p>
+<ul>
+<li>Alternatively if you want to start from scracth then just choose <code>File</code> &gt; <code>Close all files</code> </li>
 </ul>
 <p><img alt="select surfaces" src="../../img/task4_closefiles.png" /></p>
 <ul>
-<li>in <strong>wb_view</strong> load in the surface <code>100307.L.pial.native.surf.gii</code> again from <code>Practicum81\/DATA/HCP/100307/MNINonLinear/Native/</code> . Click on <strong>Surface</strong> to view the Left hemisphere. Now load in the cortical thickness overlay <code>100307.L.thickness.native.shape.gii</code> from the same location. You will need to change the <code>Files of type</code> field to  <code>Metric Files (*.func.gii *.shape.gii)</code> or <code>Any File (*)</code> to be able to select the thickness overlay. Activate the layer by clicking on the checkbox alongside it. Also click on the color bar to see the range of cortical thicknesses across the brain and their associated colors.</li>
+<li>in <strong>wb_view</strong> load in the surface <code>100307.L.pial.native.surf.gii</code> again from <code>Practicum81/DATA/HCP/100307/MNINonLinear/Native/</code> if not already open. Click on <strong>Surface</strong> to view the Left hemisphere. Now load in the cortical thickness overlay <code>100307.L.thickness.native.shape.gii</code> from the same location. You will need to change the <code>Files of type</code> field to  <code>Metric Files (*.func.gii *.shape.gii)</code> or <code>Any File (*)</code> to be able to select the thickness overlay. Activate the layer by clicking on the checkbox alongside it. Also click on the color bar to see the range of cortical thicknesses across the brain and their associated colors.</li>
 </ul>
 <p><img alt="select surfaces" src="../../img/task3_loadOverlay.png" /></p>
 <ul>
@@ -450,13 +461,16 @@ Text: '0 3 0 56 0 0 1 1 2 2 2 72 3 3 4 4 6 14 6 6 6 11
 <p><img alt="select surfaces" src="../../img/task3_viewThickness.png" /></p>
 <ul>
 <li>
-<p>We will now open this overlay in Matlab, change the cortical thickness of our target vertex and its neighbors and visualize the changed ovelay in wb_view</p>
+<p>We will now open this overlay in Matlab, change the cortical thickness of our target vertex and its neighbors and visualize the changed overlay in wb_view</p>
+</li>
+<li>
+<p>Open the file <code>task_003_giftioverlay.m</code> in matlab.</p>
 </li>
 <li>
 <p>As before run each section in matlab separately to follow along with what is happening in the code. First run the <code>addpath ..</code> section to ensure that the gifti library is accessible and that all Matlab windows are closed and variables cleared.</p>
 </li>
 <li>
-<p>In  section A we load in the surface as before and now also load in the cortical thickness overlay. Notice that the overlay and the surface match as the number of vertices is equal to the number of thickness values.</p>
+<p>In  section <strong>A</strong> we load in the surface as before and now also load in the cortical thickness overlay. Notice that the overlay and the surface match as the number of vertices is equal to the number of thickness values.</p>
 <pre><code>Reading Surface ./DATA/HCP/100307/MNINonLinear/Native/100307.L.pial.native.surf.gii
 Surface has 261754 faces
 Surface has 130879 vertices
@@ -489,12 +503,12 @@ Overlay has 130879 values
 </ul>
 <p><img alt="select surfaces" src="../../img/task3_changeThickness.png" /></p>
 <ul>
-<li>You can change what overlays are activated and the precedence in which they are displayed by selecting different files and/or toggling the visibility of the layer.</li>
+<li>You can change what overlays are activated and the precedence in which they are displayed by selecting different files and/or toggling the visibility of the layer. You may also want to change the <code>Drawing Type</code> in <code>Surface</code> &gt; <code>Properties</code> to <code>Triangles</code> to see a clear thickness change in the patch of cortex as you toggle between layers.</li>
 </ul>
 <p><img alt="select surfaces" src="../../img/task3_layerprec.png" /></p>
 <ul>
 <li>
-<p>You may also want to view the amended cortical thickness overlay <code>amended.100307.L.thickness.native.shape.gii</code> on your amended pial surface <code>amended.100307.L.pial.native.surf.gii</code> or on other surfaces that are available.</p>
+<p>In addition you may also want to view the amended cortical thickness overlay <code>amended.100307.L.thickness.native.shape.gii</code> on your amended pial surface <code>amended.100307.L.pial.native.surf.gii</code> or on other surfaces that are available in the same directory. These surfaces are all in vertex correspondence for the subject 100307.</p>
 </li>
 <li>
 <p>In section D and E you can again study the XML structure of the overlay to see how it corresponds to the gifti structure loaded into matlab.</p>
@@ -538,7 +552,7 @@ Overlay has 130879 values
 <p>where the value of <code>nii2.dim[7] = 248488</code> is the data size in floats which is equal to <code>4*248488=993952</code> in bytes. The XML is thus embedded in the extent section between the header and the data. It is this section that the cifti-matlab library reads to determine exactly how the surface and volume models are set up.</p>
 </li>
 <li>
-<p>Run <strong>Section B</strong> to explore the CIFTI XML file in a matlab structure and in a browser. Notice that like the gifti overlay this cifti overlay has data for both cortices in a <code>cdata</code> structure.</p>
+<p>Run <strong>Section B</strong> to explore the CIFTI XML file in a matlab structure and in a browser. Notice that like the gifti overlay this cifti overlay has data for both cortices in a <code>cdata</code> structure which can be accessed as <code>ciiall.cdata</code></p>
 <pre><code>&gt;&gt; ciiall
 
 ciiall =
@@ -567,12 +581,8 @@ ciixml =
 </ul>
 <p><img alt="select surfaces" src="../../img/task4_ciftixmlscalar.png" /></p>
 <ul>
-<li>As already mentioned, the data structure <code>ciiall</code> contains all the cortical thickness data for both hemispheres in <code>ciiall.cdata</code> indexed starting from 1 to 125197 for the left cortex and from 125198 to 24848.</li>
-</ul>
-<p><img alt="select surfaces" src="../../img/task4_ciftiscalardata.png" /></p>
-<ul>
 <li>
-<p>This is seen in the XML output in the browser and in the ciixml structure. It can also be confirmed by querying <code>ciiall</code> which has all the required information. Here we look at the model for the CORTEX_LEFT</p>
+<p>Information for each cortex can be obtained by looking at the <code>diminfo</code> fields. Here we look at the model for the CORTEX_LEFT which is contained in <code>diminfo{1}.models{1}</code></p>
 <pre><code> &gt;&gt; ciiall.diminfo{1}.models{1}
 
  ans =
@@ -588,11 +598,24 @@ ciixml =
 </code></pre>
 </li>
 <li>
-<p>Unlike the GIFTI matlab library that indexed vertices starting from 1, this CIFTI library uses an index to index the vertices! This is a little complicated but in essence if we look at the <code>vertlist</code> structure for the first three vertices we see that they are correctly identified as 0,1 and 2.</p>
+<p>Unlike the GIFTI matlab library that indexed vertices starting from 1, this CIFTI library uses an index to index the vertices! This is a little complicated but in essence if we look at the <code>vertlist</code> structure for the first three vertices in the left hemisphere we see that they are correctly identified as 0,1 and 2.</p>
 <pre><code>ciiall.diminfo{1}.models{1}.vertlist(1:3)
 ans =
 
      0     1     2
+</code></pre>
+</li>
+<li>
+<p>As already mentioned, the data structure <code>ciiall</code> contains all the cortical thickness data for both hemispheres in <code>ciiall.cdata</code> indexed starting from 1 to 125197 for the left cortex and from 125198 to 248488. These indexes are used as pointers into a vertex list <code>vertlist</code> which is stored for each surface. So the cortical thickness values for the first three vertices 0,1,2 in the Left hemisphere are obtained as follows:</p>
+<pre><code>ciiall.cdata(1:3)
+
+ans =
+
+  3×1 single column vector
+
+        2.201649
+        2.323979
+         2.41378
 </code></pre>
 </li>
 <li>
@@ -672,11 +695,13 @@ ans =
 <p>In section <strong>B</strong>, we will now take an arbitrary vertex 17617 in the <strong>Right</strong> hemisphere and plot the fmri data in that vertex along with its closest neighbors. Observe that we have to check for existence of the neighbors that we find in the available list of vertices because one of the neighbors might actually be in the medial layer. </p>
 </li>
 </ul>
-<p>The code below takes <code>allverts</code> which includes vertex 17617 as well as its close neighbours and compares it against all the visible vertices that are not on the medial layer.</p>
+<p>This is achieved using the code below which takes <code>allverts</code> which includes vertex 17617 as well as its close neighbours and compares it against all the visible vertices that are not on the medial layer.</p>
 <pre><code>neighindex=ismember(visverts,allverts);
 </code></pre>
-<p>Notice also how we have to pinpoint the vertex within the data by using an offset because the data starts with values in the left cortex first. The data on the right hemisphere which we are interested in starts after the data in the left hemisphere.</p>
-<pre><code>`findRHneighbors=findneighbors + ciiall.diminfo{1}.models{2}.start - 1`
+<p>Notice also how we have to pinpoint the Right Hemisphere vertex data within <code>ciiall.cdata</code> data by using an offset because the <code>ciiall.cdata</code> is populated first with values from the left cortex but the Right Hemisphere starts indexing its vertices from 0. </p>
+<pre><code>findRHneighbors=findneighbors + ciiall.diminfo{1}.models{2}.start - 1
+..
+plot(ciiall.cdata(findRHneighbors,:)')
 </code></pre>
 <p><img alt="select surfaces" src="../../img/task4_timeseries.png" /></p>
 <ul>
@@ -684,7 +709,7 @@ ans =
 <p>In section <strong>C</strong>, we do the same for another arbitrary point on the Right cortex, vertex 8470 and we see a plot of the time series for this vertex and its neighbors.</p>
 </li>
 <li>
-<p>In section <strong>D</strong>, we now switch gears and look at a volume. We identfy an arbitrary voxel within the Left Hippocampus and identify its potential 26 neighbors. Again as with the vertices we check the <code>voxlist</code> for existence as some of these voxels might be in other structures and thus not accessible within the Left Hippocampus.In fact we find that there are 26 neighbors to our voxel. </p>
+<p>In section <strong>D</strong>, we now switch gears and look at a volume. We will investigate the Left Hippocampus which is indexed as model number 14 in the array of available models. Volumes are indexed using a voxel list <code>voxlist</code>.</p>
 <pre><code>ciiall.diminfo{1}.models{14} =
 
   struct with fields:
@@ -697,7 +722,24 @@ ans =
 </code></pre>
 </li>
 <li>
-<p>In Section <strong>E</strong> we simulate an fMRI signal and place identical copies of it in vertex 17617 and its 6 neighbors, vertex 8470 and its 6 neighbours and voxel 56,56,25 and its 26 neighbors. And finally in section <strong>F</strong> we save a copy of the cifti called <code>amended.rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii</code></p>
+<p>The voxel list is actually a 2D matrix with 3 rows representing the <strong>i</strong>, <strong>j</strong> and <strong>k</strong> index coordinates in the x, y and z directions.</p>
+<pre><code>ciiall.diminfo{1}.models{14}.voxlist(:,1:3)'
+
+ans =
+
+    55    60    21
+    56    60    21
+    57    60    21
+</code></pre>
+</li>
+<li>
+<p>We will now use an arbitrary voxel 56,56,25 within the Left Hippocampus and identify its potential neighbors. We allow diagonal voxel elements to be classified as neighbors and so a voxel can have potentially 26 close neighbors. </p>
+</li>
+<li>
+<p>Again as with the vertices we check the <code>voxlist</code> for existence as some of these voxels might be in other structures and thus not accessible within the Left Hippocampus. We do find that there are 26 neighbors to our voxel. </p>
+</li>
+<li>
+<p>In Section <strong>E</strong> we simulate an fMRI signal and place identical copies of it in vertex 17617 and its 6 neighbors, vertex 8470 and its 6 neighbours and voxel 56,56,25 and its 26 neighbors. And finally in section <strong>F</strong> we save a copy of this ata in a new CIFTI file called <code>amended.rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii</code></p>
 </li>
 <li>
 <p>Now let's return to <strong>wb_view</strong>. It might be easier to close all files and then load in the following files:</p>
@@ -743,7 +785,7 @@ ans =
 </ul>
 <p><img alt="select surfaces" src="../../img/task4_nosurfdynconn_magma.png" /></p>
 <ul>
-<li>And clicking on those vertices will reestablish the functional connectivity with the hippocampus.</li>
+<li>And clicking on those vertices will re-establish the functional connectivity with the hippocampus.</li>
 </ul>
 <p><img alt="select surfaces" src="../../img/task4_surfdynconn_magma.png" /></p>
 <h2 id="final-words">Final words</h2>
