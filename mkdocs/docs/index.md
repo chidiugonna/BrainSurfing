@@ -9,7 +9,7 @@ The GitHub repository that supports this [documentation](https://chidiugonna.git
 Links to the documentation for the lessons are provided below:
 *** 
 
-[Lesson 8](surfdata/introformats.md): Introduction to Surface-based Formats
+<!-- [Lesson 8](surfdata/introformats.md): Introduction to Surface-based Formats -->
 
 [Practicum 8.1](surfdata/prac81.md): Surface Data Formats
 
