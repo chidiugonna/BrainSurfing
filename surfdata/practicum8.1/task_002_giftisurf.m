@@ -85,9 +85,7 @@ end
 %for efficiency
 %once saved you can try and open it up in wb_view
 save(mysurfleft_mesh,'amended.100307.L.pial.native.surf.gii','GZipBase64Binary');
-
-
-
+fprintf('Successfully saved amended GIFTI surface\n')
 
 %% D
 % View the XML Metadata of GIFTI using a browser 
@@ -97,7 +95,8 @@ save(mysurfleft_mesh,'mygifti_allxml.gii','ASCII');
 % using firefox to look at the XML on mac or linux (firefox will need to be
 % on your path) - if below doesn't work then just open a broser and open
 % the file in it.
-system('firefox mygifti_allxml.gii')
+system('firefox mygifti_allxml.gii &')
+fprintf('Look in browser to see Gifti XML or open mygifti_allxml.gii directly in your browser\n')
 
 % Notice that data is read in column-major order
 % this means that columns are read before rows
@@ -114,7 +113,7 @@ addpath ./matlab-library/xml2struct
 % caused errors with my version of matlab 
 % if on unix (Mac, Linux) then use sed command to remove 2nd line which is DOCTYPE 
 
-system('sed 2d mygifti_allxml.gii > mygifti_xml.gii')
+system('sed 2d mygifti_allxml.gii > mygifti_xml.gii &')
 
 % if on windows then will need to do this using powershell
 %

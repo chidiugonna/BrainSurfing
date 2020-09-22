@@ -27,7 +27,7 @@ fprintf('This is equivalent to %d bytes in its data section\n',nii2.dim(7)*4);
 fprintf('data size of %d + vox offset of %d = filesize of %d bytes\n',nii2.vox_offset, nii2.dim(7)*4, filesize);
 [exts, extents] = get_nifti2_extents(ciftioverlay);
 fprintf('The CIFTI XML is stored in %d bytes\n',extents(1));
-fprintf('This is equal to vox_offset %d bytes - 8 extension bytes - %d header bytes\n',nii2.vox_offset,nii2.sizeof_hdr);
+fprintf('This is equal to vox_offset %d bytes - 4 extension bytes - %d header bytes\n',nii2.vox_offset,nii2.sizeof_hdr);
 
 
 %% B  Read CIFTI dscalar of L and R Cortex
@@ -132,9 +132,9 @@ ciiallft= ft_read_cifti(ciftifile,'debug','true');
 ciixml = xml2struct('debug.xml');
 
 if (~isempty(varargin))
-      system(sprintf('%s debug.xml',string(varargin(1))));
+      system(sprintf('%s debug.xml &',string(varargin(1))));
 else
-    system('firefox debug.xml');
+    system('firefox debug.xml &');
 end
 
 end

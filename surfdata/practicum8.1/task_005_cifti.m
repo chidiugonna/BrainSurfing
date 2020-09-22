@@ -187,9 +187,9 @@ ciiallft= ft_read_cifti(ciftifile,'debug','true');
 ciixml = xml2struct('debug.xml');
 
 if (~isempty(varargin))
-      system(sprintf('%s debug.xml',string(varargin(1))));
+      system(sprintf('%s debug.xml &',string(varargin(1))));
 else
-    system('firefox debug.xml');
+    system('firefox debug.xml &');
 end
 
 end

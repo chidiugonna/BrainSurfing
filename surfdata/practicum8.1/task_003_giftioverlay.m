@@ -59,7 +59,7 @@ fprintf('\n');
 
 allVerticesCifti=allVerticesMatlab - 1;
 neighborsCifti=neighborsMatlab - 1;
-fprintf('The vertices (using Cifti indices) neighboring %d are:\n', ciftivind);
+fprintf('The vertices (using wb_view indices) neighboring %d are:\n', ciftivind);
 fprintf('%d ',neighborsCifti);
 fprintf('\n');
 
@@ -70,7 +70,7 @@ overlaydata(:,2)=allVerticesMatlab;
 overlaydata(:,3)= myoverlayleft.cdata(allVerticesMatlab);
 
 fprintf('The vertices have the following cortical thickness values:\n')
-fprintf('\tCifti Index\tMatlab Index\tCortical Thickness\n')
+fprintf('\twb_view Index\tMatlab Index\tCortical Thickness\n')
 fprintf('\t%d\t\t%d\t\t%d\n',overlaydata')
 
 %% C set all the vertices to a uniform cortical thickness and  create a new GIFTI file
@@ -89,7 +89,7 @@ end
 %for efficiency
 %once saved you can try and open it up in wb_view
 save(myoverlayleft,'amended.100307.L.thickness.native.shape.gii','GZipBase64Binary');
-
+fprintf('Successfully saved amended GIFTI overlay\n')
 
 
 
@@ -101,7 +101,8 @@ save(myoverlayleft,'mygiftioverlay_allxml.gii','ASCII');
 % using firefox to look at the XML (firefox will need to be
 % on your path); If you dont have firefox then replace with your browser type - if below doesn't work then just open a broser and open
 % the file in it.
-system('firefox mygiftioverlay_allxml.gii')
+system('firefox mygiftioverlay_allxml.gii &')
+fprintf('Look in browser to see Gifti XML or open mygiftioverlay_allxml.gii directly in your browser\n')
 
 %% OPTIONAL E1
 % Load the XML into a structure for reading
@@ -114,7 +115,7 @@ addpath ./matlab-library/xml2struct
 % caused errors with my version of matlab 
 % if on unix (Mac, Linux) then use sed command to remove 2nd line which is DOCTYPE 
 
-system('sed 2d mygiftioverlay_allxml.gii > mygiftioverlay_xml.gii')
+system('sed 2d mygiftioverlay_allxml.gii > mygiftioverlay_xml.gii &')
 
 % if on windows then will need to do this using powershell
 %
@@ -125,7 +126,7 @@ system('sed 2d mygiftioverlay_allxml.gii > mygiftioverlay_xml.gii')
 %% OPTIONAL E2
 myXML = xml2struct('mygiftioverlay_xml.gii')
 fprintf('Gifti has %d datarrays\n',size(myXML.GIFTI.DataArray,2))
-arraynum=size(myXML.GIFTI.DataArray,2);
+szarray=size(myXML.GIFTI.DataArray,2);
 
 if szarray > 1
     for arraynum=1:szarray
