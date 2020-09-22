@@ -1,9 +1,9 @@
 # <div align="center"> MRI Brain Surfing </div>
-<div align="center">  ![brainsurficon](https://github.com/chidiugonna/BrainSurfing/blob/gh-pages/img/favicon.ico) </div>
+<img src="https://github.com/chidiugonna/BrainSurfing/blob/gh-pages/img/favicon.ico" class="center">
 
 An introduction to Surface formats and Surface analysis methods for MR brain images written to support [**Computing for Neuroimagers** (SLHS 497/597)](https://d2l.arizona.edu/d2l/home/924931) run at the University of Arizona in Fall 2020.
 
-The GitHub repository that supports this documentation is available [here](https://github.com/chidiugonna/BrainSurfing)
+There is [Documentation](https://chidiugonna.github.io/BrainSurfing/) to supports this [GitHub repository](https://chidiugonna.github.io/BrainSurfing/)
 
 Links to the documentation for the lessons are provided below:
 *** 

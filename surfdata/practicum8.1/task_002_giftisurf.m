@@ -1,4 +1,7 @@
 %  add GIFTI release library to path
+clear
+close all
+clc
 addpath ./matlab-library/gifti-release
 
 %% A. Open HCP Native lh pial mesh
@@ -17,14 +20,19 @@ figure; plot(mysurfleft_mesh)
 % IMPORTANT - unfortunately matlab starts indexing from 1 while wb_view
 % indexes from 0!
 % so our vertex that was numbered 119115 is actually 119116 in matlab
-% so make sure you add 1 to the vertex numbers you get from wb_view
+
+% this is the index of the vertex from wb_view
 ciftivind=119115;
 
+%  we add 1 to the vertex numbers we get from wb_view to use matlab
+%  indexing
 matlabvind=ciftivind + 1;
+
 % find all triplets where vertex is 1st triangle
 faces = mysurfleft_mesh.faces;
 
-%combine instead as follows [ind, vol] = find((faces(:,1)==matlabvind));
+%perhaps in future use this construct [vol, ind] = find((faces(:,1)==matlabvind));
+
 C=(faces(:,1)==matlabvind);
 [ind, vol] = find((C) > 0);
 ind1=faces(ind,:);
@@ -37,7 +45,7 @@ ind2=ind2(:);
  
 C=(faces(:,3)==matlabvind);
 [ind, vol] = find((C) > 0);
-ind3=faces(ind,1:2);
+ind3=faces(ind,:);
 ind3=ind3(:);
 
 allVerticesMatlab=union(ind1,union(ind2,ind3));
@@ -48,13 +56,13 @@ fprintf('\n');
 
 allVerticesCifti=allVerticesMatlab - 1;
 neighborsCifti=neighborsMatlab - 1;
-fprintf('The vertices (using Cifti indices) neighboring %d are:\n', ciftivind);
+fprintf('The vertices (using workbench indices) neighboring %d are:\n', ciftivind);
 fprintf('%d ',neighborsCifti);
 fprintf('\n');
 
 %% C Nudge all of the vertex locations by a random amount and create a new GIFTI file
 % Note we will need to use the Matlab indices
-
+format shortG
 for neighbors=1:size(neighborsMatlab,1)
    vind=neighborsMatlab(neighbors);
    
@@ -67,8 +75,9 @@ for neighbors=1:size(neighborsMatlab,1)
    X=mysurfleft_mesh.vertices(vind,1);
    Y=mysurfleft_mesh.vertices(vind,2);
    Z=mysurfleft_mesh.vertices(vind,3);
- 
+   fprintf('perturbing vertex %d at %d,%d,%d to',vind-1,X,Y,Z);
    mysurfleft_mesh.vertices(vind,1:3)=[X+dx Y+dy Z+dz];
+   fprintf(' %d,%d,%d\n',X+dx,Y+dy,Z+dz);
    
 end
 
@@ -80,7 +89,7 @@ save(mysurfleft_mesh,'amended.100307.L.pial.native.surf.gii','GZipBase64Binary')
 
 
 
-%% OPTIONAL D
+%% D
 % View the XML Metadata of GIFTI using a browser 
 % A bit of a long-winded way to see the GIFTI header because xmlread cannot cope with !DOCTYPE
 %  save the gifti in ascii format then we can open it in Chrome, Firefox
@@ -93,10 +102,8 @@ system('firefox mygifti_allxml.gii')
 % Notice that data is read in column-major order
 % this means that columns are read before rows
 
-% on windows
-%system('firefox.exe mygifti_allxml.gii')
 
-%% OPTIONAL E
+%% OPTIONAL E1
 % Load the XML into a structure for reading
 
 % we will need the xml2struct library to read the xml which can 
@@ -106,13 +113,16 @@ addpath ./matlab-library/xml2struct
 % To read XML we may need to remove the DOCTYPE line in the xml - this
 % caused errors with my version of matlab 
 % if on unix (Mac, Linux) then use sed command to remove 2nd line which is DOCTYPE 
-% if on windows then comment out this line and uncomment line below.
+
 system('sed 2d mygifti_allxml.gii > mygifti_xml.gii')
 
-%if on windows then use type command to directly remove DOCTYPE line -
-%uncomment this line below
-%system('type mygifti_allxml.gii | findstr /v DOCTYPE > mygifti_xml.gii')
+% if on windows then will need to do this using powershell
+%
+% >> !powershell
+% Get-Content mygifti_allxml.gii  | Where {$_ -notmatch 'DOCTYPE'} | Set-Content mygifti_xml.gii
+% >> exit
 
+%% OPTIONAL E2
 
 myXML = xml2struct('mygifti_xml.gii')
 fprintf('Gifti has %d datarrays\n',size(myXML.GIFTI.DataArray,2))

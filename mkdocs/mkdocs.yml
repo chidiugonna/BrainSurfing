@@ -3,13 +3,13 @@ nav:
     - Home: index.md
     - About: about.md
     - 'Surface Formats':
-        - 'Introduction to Surface-based Formats' : surfdata/introformats.md
-        - 'Neuroimaging Data Formats' : surfdata/formatref.md
+#        - 'Introduction to Surface-based Formats' : surfdata/introformats.md
+#        - 'Neuroimaging Data Formats' : surfdata/formatref.md
         - 'practicum 8.1' : surfdata/prac81.md
-    - 'Surface Analysis':
-        - 'Working with Surface-based formats' : surfanalysis/introanalysis.md
-        - 'Surface Analysis Pipelines' : surfanalysis/analysisref.md
-        - 'practicum 9.1' : surfanalysis/prac91.md
+#    - 'Surface Analysis':
+#        - 'Working with Surface-based formats' : surfanalysis/introanalysis.md
+#        - 'Surface Analysis Pipelines' : surfanalysis/analysisref.md
+#        - 'practicum 9.1' : surfanalysis/prac91.md
 theme: readthedocs
 markdown_extensions:
   - extra

@@ -3,7 +3,8 @@
 
 An introduction to Surface formats and Surface analysis methods for MR brain images written to support [**Computing for Neuroimagers** (SLHS 497/597)](https://d2l.arizona.edu/d2l/home/924931) run at the University of Arizona in Fall 2020.
 
-The GitHub repository that supports this documentation is available [here](https://github.com/chidiugonna/BrainSurfing)
+The GitHub repository that supports this [documentation](https://chidiugonna.github.io/BrainSurfing/) is available [here](https://github.com/chidiugonna/BrainSurfing)
+
 
 Links to the documentation for the lessons are provided below:
 *** 
@@ -14,8 +15,8 @@ Links to the documentation for the lessons are provided below:
 
 ***
 
-[Lesson 9](surfanalysis/introanalysis.md): Working with Surface-based formats
+<!--[Lesson 9](surfanalysis/introanalysis.md): Working with Surface-based formats
 
 [Practicum 9.1](surfanalysis/prac91.md): Surface-Based Analysis
 
-*** 
+***  -->

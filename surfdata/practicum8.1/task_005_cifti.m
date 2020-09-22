@@ -13,54 +13,109 @@ addpath ./matlab-library/gifti-release
 
 % add path to xml2struct
 addpath ./matlab-library/xml2struct
-%% A : Brief look at NIFTI-2 Header
-
-% cifti overlay for cortical thickness - has both L and R cortex values
-ciftioverlay='./DATA/HCP/100307/MNINonLinear/Native/100307.thickness.native.dscalar.nii';
-
-filesize=getfilesize(ciftioverlay);
-fprintf('The CIFTI file is stored in NIFTI-2 and is %d bytes in size\n',filesize);
-nii2 = read_nifti2_hdr(ciftioverlay);
-fprintf('The NIFTI-2 voxel-offset is %d bytes\n',nii2.vox_offset);
-fprintf('The NIFTI-2 has %d floats in its data section\n',nii2.dim(7));
-fprintf('This is equivalent to %d bytes in its data section\n',nii2.dim(7)*4);
-fprintf('data size of %d + vox offset of %d = filesize of %d bytes\n',nii2.vox_offset, nii2.dim(7)*4, filesize);
-[exts, extents] = get_nifti2_extents(ciftioverlay);
-fprintf('The CIFTI XML is stored in %d bytes\n',extents(1));
-fprintf('This is equal to vox_offset %d bytes - 8 extension bytes - %d header bytes\n',nii2.vox_offset,nii2.sizeof_hdr);
 
 
-%% B  Read CIFTI dscalar of L and R Cortex
-
+%% A: Read CIFTI dtseries of L, R Cortex and Sub-Cortical structures on subsampled mesh
+%
+ciftioverlay='./DATA/HCP/100307/MNINonLinear/Results/rfMRI_REST1_LR/rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii';
 ciiall = traverse_cifti(ciftioverlay);
-ciixml = get_cifti_xml(ciftioverlay);
 %run code as follows if firefox not on path - pass in full path to firefox
 %or alternate browser
 %ciixml = get_cifti_xml(ciftioverlay,'/usr/bin/firefox');
 
-
-%% C Find Medial vertices
-%find medial vertices - these are removed from the cifti
-totverts=ciiall.diminfo{1}.models{1}.numvert;
-totverts=[0:totverts-1];
-visverts=ciiall.diminfo{1}.models{1}.vertlist;
-medialverts = setdiff(totverts, visverts)
-% You can confirm this by opening gifti surface in wb_view
-
-%% D load associated surface and find all the vertices connected and confirm with visualization
-% to a particular vertex 119115
-mysurf='./DATA/HCP/100307/MNINonLinear/Native/100307.L.midthickness.native.surf.gii';
-[neighbors,neighmatlab, allverts, allvertmatlab]=get_neighbors(mysurf, 119115);
-visverts=ciiall.diminfo{1}.models{1}.vertlist;
+%% B Find neighbors to vertex 17617 
+%
+mysurf='./DATA/HCP/100307/MNINonLinear/fsaverage_LR32k/100307.R.midthickness.32k_fs_LR.surf.gii';
+[neighbors,neighmatlab, allverts, allvertmatlab]=get_neighbors(mysurf, 17617);
+visverts=ciiall.diminfo{1}.models{2}.vertlist;
 neighindex=ismember(visverts,allverts);
+
 findneighbors=find(neighindex);
-thickness = zeros(size(findneighbors,2),2)
-thickness = [(visverts(findneighbors))' ciiall.cdata(findneighbors)]
 
-%% E change cifti and write new thickness values of 2mm
+%offset into Right Hemosphere
+findRHneighbors=findneighbors + ciiall.diminfo{1}.models{2}.start -1;
+figure;
+plot(ciiall.cdata(findRHneighbors,:)')
 
-ciiall.cdata(findneighbors)=ones(size(findneighbors))*2;
-cifti_write(ciiall,'amended.100307.thickness.native.dscalar.nii')
+%% C Find neighbors to vertex 8470
+%
+mysurf='./DATA/HCP/100307/MNINonLinear/fsaverage_LR32k/100307.R.midthickness.32k_fs_LR.surf.gii';
+[neighborsA,neighmatlabA, allvertsA, allvertmatlabA]=get_neighbors(mysurf, 8470);
+visvertsA=ciiall.diminfo{1}.models{2}.vertlist;
+neighindexA=ismember(visvertsA,allvertsA);
+
+findneighborsA=find(neighindexA);
+
+%offset into Right Hemosphere
+findRHneighborsA=findneighborsA + ciiall.diminfo{1}.models{2}.start -1;
+figure;
+plot(ciiall.cdata(findRHneighborsA,:)')
+
+
+%% D Find neighbors to voxel 
+% left Hippocampus is represented by model 14
+ciiall.diminfo{1}.models{14}
+
+%The list of voxels are in voxlist
+ciiall.diminfo{1}.models{14}.voxlist;
+
+% range of voxel coordinates
+xrange=[min(ciiall.diminfo{1}.models{14}.voxlist(1,:)) max(ciiall.diminfo{1}.models{14}.voxlist(1,:))];
+yrange=[min(ciiall.diminfo{1}.models{14}.voxlist(2,:)) max(ciiall.diminfo{1}.models{14}.voxlist(2,:))];
+zrange=[min(ciiall.diminfo{1}.models{14}.voxlist(3,:)) max(ciiall.diminfo{1}.models{14}.voxlist(3,:))];
+
+% choosing 55,56,30 and find neighbors
+XO=56; YO=56; ZO=25;
+
+voxexists=sum(ismember(ciiall.diminfo{1}.models{14}.voxlist', [XO YO ZO], 'rows'));
+
+if ~voxexists 
+    fprintf('Your choice of voxel %d,%d,%d is not in the structure. You may not find valid neighbors.\n',XO,YO,ZO)
+else
+    fprintf('Your choice of voxel %d,%d,%d is present in the structure.\n',XO,YO,ZO)
+end
+
+[X,Y,Z] = meshgrid(-1:1,-1:1,-1:1);
+XX=X(:)+XO;
+YY=Y(:)+YO;
+ZZ=Z(:)+ZO;
+
+neighvoxes=[XX YY ZZ];
+voxneighindex=ismember(ciiall.diminfo{1}.models{14}.voxlist', neighvoxes, 'rows');
+fprintf('found %d neighbors to chosen voxel\n',sum(voxneighindex) - 1)
+findvoxneighbors=find(voxneighindex);
+
+ciiall.diminfo{1}.models{14}.voxlist(:,findvoxneighbors)';
+
+%offset into Hippocampus
+findHipponeighbors=findvoxneighbors + ciiall.diminfo{1}.models{14}.start - 1;
+figure;
+plot(ciiall.cdata(findHipponeighbors,:)')
+
+
+%% E Create Functionally connected zone in Right Cortex (17617) to aother vertex in right cortex (8470) 
+% Remember that 8470 is indexed as 38167 in cdata (i.e. ciiall.diminfo{1}.models{2}.start + 8470)
+%
+
+% simulate fMRI signal
+signalprint=15000 + 700*rand(1,1200);
+
+newcdata=ciiall.cdata;
+
+%copy signal into vertex 17617 and neighbors
+newcdata(findRHneighbors,:)=ones(length(findRHneighbors),1200).*signalprint;
+
+% copy signal into voxel 8470 and neighbors
+newcdata(findRHneighborsA,:)=ones(length(findRHneighborsA),1200).*signalprint;
+
+% copy signal into L Hippo voxel and neighbors
+newcdata(findHipponeighbors,:)=ones(length(findHipponeighbors),1200).*signalprint;
+
+%% F Save Cifti
+%
+ciftinew = cifti_struct_create_from_template(ciiall, newcdata, 'dtseries','start',0,'step',1,'unit', 'SECOND'); 
+ciftisave(ciftinew,'amended.rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii')
+
 
 %%  Helper Functions are Defined below
 % 
@@ -192,7 +247,7 @@ end
 function filesize = getfilesize(IMAGE1) 
 fid = fopen(IMAGE1);
 fseek(fid, 0, 'eof');
-filesize = ftell(fid);
+filesize = ftell(fid)
 fclose(fid);
 end
 

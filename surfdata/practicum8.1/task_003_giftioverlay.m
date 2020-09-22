@@ -1,4 +1,7 @@
 %  add GIFTI release library to path
+clear
+close all
+clc
 addpath ./matlab-library/gifti-release
 
 %% A. Open HCP Native lh pial mesh and cortical thickness overlay
@@ -90,20 +93,17 @@ save(myoverlayleft,'amended.100307.L.thickness.native.shape.gii','GZipBase64Bina
 
 
 
-%% OPTIONAL D
+%% D
 % View the XML Metadata of GIFTI using a browser 
 % A bit of a long-winded way to see the GIFTI header because xmlread cannot cope with !DOCTYPE
 %  save the gifti in ascii format then we can open it in Chrome, Firefox
 save(myoverlayleft,'mygiftioverlay_allxml.gii','ASCII');
-% using firefox to look at the XML on mac or linux (firefox will need to be
-% on your path) - if below doesn't work then just open a broser and open
+% using firefox to look at the XML (firefox will need to be
+% on your path); If you dont have firefox then replace with your browser type - if below doesn't work then just open a broser and open
 % the file in it.
 system('firefox mygiftioverlay_allxml.gii')
 
-% on windows
-%system('firefox.exe mygifti_allxml.gii')
-
-%% OPTIONAL E
+%% OPTIONAL E1
 % Load the XML into a structure for reading
 
 % we will need the xml2struct library to read the xml which can 
@@ -113,17 +113,19 @@ addpath ./matlab-library/xml2struct
 % To read XML we may need to remove the DOCTYPE line in the xml - this
 % caused errors with my version of matlab 
 % if on unix (Mac, Linux) then use sed command to remove 2nd line which is DOCTYPE 
-% if on windows then comment out this line and uncomment line below.
+
 system('sed 2d mygiftioverlay_allxml.gii > mygiftioverlay_xml.gii')
 
-%if on windows then use type command to directly remove DOCTYPE line -
-%uncomment this line below
-%system('type mygifti_allxml.gii | findstr /v DOCTYPE > mygifti_xml.gii')
+% if on windows then will need to do this using powershell
+%
+% >> !powershell
+% Get-Content mygifti_allxml.gii  | Where {$_ -notmatch 'DOCTYPE'} | Set-Content mygifti_xml.gii
+% >> exit
 
-
+%% OPTIONAL E2
 myXML = xml2struct('mygiftioverlay_xml.gii')
 fprintf('Gifti has %d datarrays\n',size(myXML.GIFTI.DataArray,2))
-szarray=size(myXML.GIFTI.DataArray,2);
+arraynum=size(myXML.GIFTI.DataArray,2);
 
 if szarray > 1
     for arraynum=1:szarray
