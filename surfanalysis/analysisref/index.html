@@ -9,7 +9,7 @@
   
   
   <link rel="shortcut icon" href="../../img/favicon.ico">
-  <title>registration - BrainSurfing</title>
+  <title>Pipelines for Surface-Based Analysis - BrainSurfing</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="../../css/theme.css" />
@@ -18,7 +18,7 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "registration";
+    var mkdocs_page_name = "Pipelines for Surface-Based Analysis";
     var mkdocs_page_input_path = "surfanalysis/analysisref.md";
     var mkdocs_page_url = null;
   </script>
@@ -81,7 +81,7 @@
     
       
     
-    <li>registration</li>
+    <li>Pipelines for Surface-Based Analysis</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -92,7 +92,94 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="registration">registration</h1>
+                <h1 id="pipelines-for-surface-based-analysis">Pipelines for Surface-Based Analysis</h1>
+<hr />
+<p>There are many approaches that can be taken to perform Surface-Based neuroimaging analysis and the steps used will depend on a number of conditions e.g. what image modalities you have access to, the quality of the data at your disposable and of course what research question you are hoping to answer.</p>
+<h2 id="surface-based-analysis-in-a-nutshell">Surface-Based analysis in a nutshell</h2>
+<p>Assuming that sufficiently high quality data has been collected on a brain structure that will benefit from surface-based analysis then the first step in the analysis process is to generate the <strong>surface meshes</strong> of each individual subject from the anatomical data in a surface data format like GIFTI.</p>
+<p>Once the surface model is created then data from a variety of modalities e.g. fMRI, perfusion data, Susceptibility Weighted data etc and derivatives of these modalities e.g. cortical thickness etc can be projected onto the surface as <strong>surface overlays</strong> or <strong>layers</strong>.</p>
+<p>Once on the surface then additional processing can be performed using <strong>valid surface-based geodesic location information</strong>. For example <strong>smoothing</strong> of fmri volumes can be performed which avoid mixing signals across sulcal banks.</p>
+<p>For group analysis it is necessary to register subjects to a common template for direct comparison. <strong>Surface-based registration</strong> to a common template can thus be performed on the surface meshes and the registration transform implictly applied to the overlays for inter-subject comparison.</p>
+<p>Finally statistical analysis can be performed on the registered volumes. For simple analysis that doesn't require knowlesge of surface locations then direct analysis using MATLAB is feasible. If the data is in CIFTI format with both volume and surface data then a fakenifti can be created and analysed using wb_command.</p>
+<p>Analysis that requires awareness of spatial location on the surface then this can be challenging to implement on one's own. The number of tools that can help with this is growing and includes command line interfaces to FILM and FLAME, as well as PALM.</p>
+<h2 id="surface-based-analysis-pre-conditions">Surface-Based analysis pre-conditions</h2>
+<hr />
+<h3 id="structures-with-folded-cortex">Structures with folded cortex</h3>
+<p>Surface-based methods are most appropriate for analysis of the tightly-folded cerebral cortex and cerebellar cortex which seem to demonstrate structural and functional differentiation along the 2D surface of the cortex. </p>
+<h3 id="high-spatial-resolution">High Spatial Resolution</h3>
+<p>In order to take advantage of surface-based methods a high-resolution anatomical image like a T1w image with good grey, white and CSF contrast is required. For the Cerebral cortex a 1 mm T1w image is usually sufficient for creating the surface meshes that are foundational to all the downstream processing steps. For the much thinner and much more highly folded cerebellar cortex then it has been suggested that a spatial resolution of about 0.2 mm <a href="#references">[Diedrichsen and Zotow, 2015]</a> is required for full unfolding.</p>
+<p>If functional MRI is going to be studied on the surface then to avoid partial volume effects between vertices on opposite banks of a sulcus then at least 2mm resolution <a href="#references">[Smith et al, 2013]</a> is required for the cerebral cortex. </p>
+<h2 id="tools-for-surface-mesh-creation">Tools for Surface Mesh creation</h2>
+<hr />
+<h3 id="freesurfer">Freesurfer</h3>
+<p>Use version 7.1 over version 7.0.0. As the latter has been <a href="https://surfer.nmr.mgh.harvard.edu/fswiki/ReleaseNotes">recalled</a>.
+Available as a docker image from <a href="https://hub.docker.com/r/freesurfer/freesurfer/">Docker Hub</a></p>
+<h2 id="surface-based-analysis-pipelines-using-freesurfer">Surface-Based Analysis Pipelines using Freesurfer</h2>
+<hr />
+<h3 id="hcp-pipelines">HCP Pipelines</h3>
+<p>The HCP pipelines were developed by the Human Connectome Project to explore the structural and functional connectivity of 1200 healthy young adults using high resolution MRI data which includes T1w (0.7mm), T2w (0.7mm) and fMRI (2mm) data
+Latest release is <a href="https://github.com/Washington-University/HCPpipelines/releases">v4.2.0</a>. Download and extract the <a href="https://github.com/Washington-University/HCPpipelines/archive/v4.2.0.zip">zip file</a> to use.</p>
+<h3 id="fmriprep">Fmriprep</h3>
+<p>versions of fmriprep available on <a href="https://hub.docker.com/r/poldracklab/fmriprep/tags">Docker Hub</a>. Avoid <a href="https://github.com/poldracklab/fmriprep/blob/b10d94063e93e6c3ceec78c1df11e50492ae091c/.versions.json">buggy</a> versions as far as possible. Look at <a href="https://fmriprep.org/en/stable/changes.html">Read me</a> and also at <a href="https://github.com/poldracklab/fmriprep/releases/">releases</a> to determine version to take. Will take most stable release which is 20.1.3</p>
+<pre><code> docker pull poldracklab/fmriprep:20.1.3
+</code></pre>
+<h3 id="ciftify">Ciftify</h3>
+<p>Ciftify facilitates surface generation on legacy MRI data using the HCP approach which was developed for high quality data and their own very specific acquisition protocol (Field Maps, Single Band Reference, High resolution T2W images etc..) The latest version of <a href="https://github.com/edickie/ciftify">Ciftify</a> can also run fmriprep to produce required<a href="https://edickie.github.io/ciftify/#/02_bids-app"> outputs</a> and transform your BIDS data into HCP-type data. The provided docker version of ciftify uses fmriprep version 1.3.2. It is recommended to run fmriprep first on your data using the latest fmriprep and then run ciftify with the right flags.</p>
+<pre><code>docker pull tigrlab/fmriprep_ciftify:v1.3.2-2.3.3
+</code></pre>
+<h2 id="practical-pipeline-implementations">Practical Pipeline Implementations</h2>
+<hr />
+<h3 id="freesurfer-fmriprep">Freesurfer + fmriprep</h3>
+<p>This option might be necessary if you want to use a version of freesurfer that is not bundled as part of the fmriprep image or if you have already preprocesed your surfaces with freesurfer. It is possibleto create a docker version of fmriprep with a <a href="https://neurostars.org/t/fmriprep-how-to-incorporate-pre-run-freesurfer/1425">different version of freesurfer</a> but it will be important to flag this in the citation of any work you do.</p>
+<p>Run freesurfer on standard 1mm resolution T1w data. T2w data can also be provided if available to improve the accuracy of the pial layer.</p>
+<pre><code>recon-all -all -subject $SUBJECT -i $IMAGE -T2 $T2IMAGE -T2pial
+</code></pre>
+<p>If the T2 images were omitted in a first run, then they can be subsequently run as follows</p>
+<pre><code>recon-all -all -subject $SUBJECT -i $IMAGE -T2 $T2IMAGE -T2pial -autorecon3
+</code></pre>
+<p>Using Docker you can point to your license using the <code>FS_LICENSE</code> environment variable</p>
+<p>Before running fmriprep then ensure that $OUTPUTDIR for your fmriprep analysis contains the freesurfer folders of your subject and fsaverage for your version of freesurfer. cifti outputs are generated using <code>--cifti-output</code></p>
+<pre><code>docker run -v /tmp:/tmp -v /media:/media poldracklab/fmriprep:20.1.3 --participant_label 001 --cifti-output --nthreads 8  -w /media/INFO/SurfaceProcessing/fmriprep/work --use-aroma --fs-license-file /mnt/license.txt /media/INFO/NEURODATA/UA/BIDS /media/INFO/SurfaceProcessing/fmriprep/output participant
+</code></pre>
+<h3 id="fmriprep_1">Fmriprep</h3>
+<p>Fmriprep can also be set up to run the freesurfer step as part of its run. It runs freesurver v6.0.0 without the skull stripping step to perform initial basic reconstruction. It then utilizes a previously calculated <a href="https://fmriprep.org/en/0.4.2/workflows.html#t1w-t2w-preprocessing">brain mask</a> to complete surface reconstruction. Simply running the docker step above will thus run freesurfer and fmriprep to create the cifti files in </p>
+<h3 id="ciftify_1">Ciftify</h3>
+<p>Ciftify can be run on fMRI volumes for subjects that have had anatomical surfaces created by Freesurfer. Ciftify can also be run on fmriprep outputs. </p>
+<p>will need to run fmriprep with <code>--output-spaces</code> for <code>cifti_fmri_subject</code> - it looks like <code>anat</code> is the important one - will need to test. But this reference might be <a href="https://github.com/edickie/ciftify/issues/63">important</a></p>
+<p><code>--output-spaces MNI152NLin6Asym:res-2 anat MNI152NLin2009cAsym</code></p>
+<p>The only difference between Ciftify CIFTI files and the fmriprep versions is the use of MSM-sulc in Ciftify</p>
+<pre><code>docker run -v /tmp:/tmp -v /media:/media tigrlab/fmriprep_ciftify:v1.3.2-2.3.3 /media/INFO/NEURODATA/UA/BIDS /media/INFO/SurfaceProcessing/ciftify_fmriprep/output participant --participant_label=001 --n_cpus=8 --fmriprep-workdir=/media/INFO/SurfaceProcessing/ciftify_fmriprep/work --fs-license=/mnt/license.txt
+</code></pre>
+<p>Found this to be problematic - much better it seems to run <a href="https://edickie.github.io/ciftify/#/03a_cifti-for-your_recon_all"><code>ciftify_recon_all</code></a> and <code>cifti_fmri_subject</code> directly. </p>
+<pre><code>  docker run --entrypoint ciftify_recon_all  -v /tmp:/tmp -v /media:/media tigrlab/fmriprep_ciftify:v1.3.2-2.3.3 \
+ --resample-to-T1w32k \
+ --fs-subjects-dir /path/to/freesurfer/outputs \
+ --hcp-data-dir /path/for/hcp/outputs Subject001
+</code></pre>
+<p>Ciftify works seamlessly on the fmri files in T1w space <code>_space-T1w_</code> </p>
+<p>There are issues running Ciftify using the <code>--already-in-MNI</code> flag on both the  <code>MNI152NLin6Asym:res-2</code> outputs and the then the MNI152NLin2009cAsym outputs. The volume <code>ROI.2.nii.gz</code> used for creating the dense timeseries is in MNI152NLin6Asym space (91,109,91) at 2mm isotropic and but it's sform is slightly different and so there is an error. The MNI152NLin2009cAsym has completely different dimensions (129,153,87) from the ROI2 file, has been resliced at the same dimensions as the original func (1.5, 1.5, 2.5)  and also has different sform and so a lot of work to do there too.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Most of the problems with docker come down to correct binding between the external OS and the docker container using the -v parameter. Confirm that the path you are using is indeed correctly bound. If you are accessing a path via a symlink then make sure that the sym link path is what has been used</p>
+</div>
+<h3 id="freesurfer-pipeline-with-high-resolution-anatomicals">Freesurfer Pipeline with High Resolution anatomicals</h3>
+<p>With High resolution anatomicals of &lt; 1mm3 then recon-all can be run with the <a href="https://surfer.nmr.mgh.harvard.edu/fswiki/SubmillimeterRecon"><code>-hires</code></a> flag. An $EXPERT_FILE can also be passed with the <a href="https://surfer.nmr.mgh.harvard.edu/fswiki/recon-all#ExpertOptionsFile">-expert</a> option to set the number of iterations used during the inflation.</p>
+<pre><code> recon-all -all -s $SUBJECT -hires -i $IMAGE -expert $EXPERT_FILE
+</code></pre>
+<p>An alternative approach that was developed for the HCP workflow can also be used. This uses the <a href="https://www.mail-archive.com/freesurfer@nmr.mgh.harvard.edu/msg64171.html"><code>-conf2hires</code></a> flag. This approach peforms the surface modelling in stages. With this approach however the volumetric files will be at 1mm resolution. To have both surfaces and volumes at the sub-millimeter resolution then use the <code>-hires</code> flag.</p>
+<pre><code> recon-all -all -s $SUBJECT -conf2hires -i $IMAGE -expert $EXPERT_FILE
+</code></pre>
+<h3 id="pipeline-with-hcp-style-data">Pipeline with HCP-style data</h3>
+<p>The HCP Pipelines can be directly adapted to run on this type of data.</p>
+<h2 id="references">References</h2>
+<hr />
+<p>Van Essen, D. C. (2002). <a href="http://brainvis.wustl.edu/resources/VE_ANYAS02.pdf">Surface‐based atlases of cerebellar cortex in the human, macaque, and mouse.</a> Annals of the New York Academy of Sciences, 978(1), 468-479.</p>
+<p>Coalson, T. S., Van Essen, D. C., &amp; Glasser, M. F. (2018). <a href="https://www.pnas.org/content/115/27/E6356.short">The impact of traditional neuroimaging methods on the spatial localization of cortical areas.</a> Proceedings of the National Academy of Sciences, 115(27), E6356-E6365.</p>
+<p>Diedrichsen, J., &amp; Zotow, E. (2015). <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0133402">Surface-based display of volume-averaged cerebellar imaging data.</a> PloS one, 10(7), e0133402.</p>
+<p>Smith, S. M., Beckmann, C. F., Andersson, J., Auerbach, E. J., Bijsterbosch, J., Douaud, G., ... &amp; Kelly, M. (2013). <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3720828/">Resting-state fMRI in the human connectome project.</a> Neuroimage, 80, 144-168.</p>
+<p>Sereno, M. I., Diedrichsen, J., Tachrount, M., Testa-Silva, G., d’Arceuil, H., &amp; De Zeeuw, C. (2020). <a href="https://www.pnas.org/content/117/32/19538.short">The human cerebellum has almost 80% of the surface area of the neocortex.</a> Proceedings of the National Academy of Sciences, 117(32), 19538-19543.</p>
+<p>Dickie, E. W., Anticevic, A., Smith, D. E., Coalson, T. S., Manogaran, M., Calarco, N., ... &amp; Voineskos, A. N. (2019). <a href="https://www.sciencedirect.com/science/article/abs/pii/S1053811919303714?via%3Dihub">ciftify: A framework for surface-based analysis of legacy MR acquisitions.</a> Neuroimage, 197, 818-826.</p>
+<p>Glasser, M. F., Sotiropoulos, S. N., Wilson, J. A., Coalson, T. S., Fischl, B., Andersson, J. L., ... &amp; Van Essen, D. C. (2013). <a href="https://pubmed.ncbi.nlm.nih.gov/23668970/">The minimal preprocessing pipelines for the Human Connectome Project.</a> Neuroimage, 80, 105-124.</p>
               
             </div>
           </div>

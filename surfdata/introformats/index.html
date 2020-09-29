@@ -107,26 +107,32 @@
 <p>To fully represent a cortical surface (e.g. the boundary between white matter and gray matter) as a 3D model, then the following information is usually stored in a Surface-Based Format by Neuroimaging software:</p>
 <ul>
 <li>
-<p>a list of all the vertices in that surface with their x, y and z coordinates in mm units. For a 1mm T1w image, Freesurfer uses  about 120,000 vertices to represent one of the hemispheres of the brain.</p>
+<p>A list of all the vertices in that surface with their x, y and z coordinates in mm units. For a 1mm T1w image, Freesurfer uses  about 120,000 vertices to represent one of the hemispheres of the brain.</p>
 </li>
 <li>
-<p>a list of all faces in that surface where a face is a set of three interconnected vertices. For a 1mm T1w image, Freesurfer uses about 300,000 faces to represent one of the surfaces.</p>
+<p>A list of all faces in that surface where a face is a set of three interconnected vertices. For a 1mm T1w image, Freesurfer uses about 300,000 faces to represent one of the surfaces.</p>
 </li>
 </ul>
 <p>There isn't necessarilly a predictable way to determine the number of faces from the number of vertices. For example see 2 different configurations below with the same number of vertices.</p>
 <p><img alt="brainsurficon" src="../../img/faces.png" /></p>
 </div>
-<p>For our purposes there are 2 categories of surface-based formats (in Freesurfer parlance):
-* Meshes - these define the actual surface topology
-* Overlays - these assign functional values to each vertex (e.g. thickness, curvature, myelin content, functional activation, BOLD signal, correlation etc..)</p>
+<p>There are two main surface models represented by surface-based formats:</p>
+<ul>
+<li>
+<p>Meshes - these define the actual surface topology</p>
+</li>
+<li>
+<p>Overlays - these assign functional values to each vertex (e.g. thickness, curvature, myelin content, functional activation, BOLD signal, correlation etc..)</p>
+</li>
+</ul>
 <h2 id="when-are-surface-based-formats-appropriate">When are Surface-Based formats appropriate?</h2>
 <p>Surface-based formats are only really useful if you have high resolution anatomical images that allow you to segment the brain into distinct tissue types and/or anatomical structures. They have found most utility for the analysis of the cerebral cortex due to its highly folded geometry which can lead to partial volume errors under regular volumetric analysis pipelines. The cerebellum is also a potential candidate for surface based analysis but requires extremely high resolution anatomical scans to resolve. See this recent paper by <a href="https://www.pnas.org/content/117/32/19538">Sereno et al 2020</a>.</p>
 <h2 id="why-use-surface-based-formats">Why use Surface-Based Formats?</h2>
 <p>Assuming you do have a good quality, high resolution (at least 1mm) T1w image (this is now accessible to most research groups), why would you want to bother working in surface space for the analysis of the cerebral cortex?</p>
 <h3 id="functional-and-anatomical-validity">Functional and anatomical validity</h3>
-<p>The cerebral cortex appears to display functional differentiation and organization in cortical areas on a 2-D surface. Functional experiments with visual stimuli have allowed the organization of primary visual areas to be distinctly identified using surface-based methods [Sereno et al 1995] as patches on a 2D flat map. Volumetric approaches have struggled to reveal this functional organization in primary visual cortex.</p>
+<p>The main reason for this is that the cortical sheet in the cerebrum and cerebellum appears to display functional differentiation and organization in distinct cortical areas which are best represented as a 2-dimensional surface <a href="#references">Glasser et al, 2013</a>. Functional experiments with visual stimuli have allowed the organization of primary visual areas to be distinctly identified using surface-based methods [Sereno et al 1995] as patches on a 2D flat map. Volumetric approaches have struggled to reveal this functional organization in primary visual cortex.</p>
 <h3 id="processing-accuracy-and-reliability">Processing accuracy and reliability</h3>
-<p>A follow on reason is that keeping the data in surface form prevents errors during the processing pipeline. In volumetric space, due to the highly convoluted nature of the cortex, adjacent voxels may actually be very distant from each other in reality. This is captured by vertex notation and allows preprocessing steps like smoothing, filtering, correlations and any actions that require an accurate inventory of spatial locations being used to operate with less error due to partial volume confounds.</p>
+<p>The neurobiological validity <a href="#references">Glasser et al, 2013</a> of cortical sheet representation as a 2-D surface ensures that processing steps take accurate account of spatial locations and are thus accurate and reliable. In volumetric space, due to the highly convoluted nature of the cortex, adjacent voxels may actually be very distant from each other in reality. Sulcal and gyral gaps are accurately captured by vertex notation and allow preprocessing steps like smoothing, filtering, correlations and any actions that require an accurate inventory of spatial locations being used to operate with less error due to partial volume confounds.</p>
 <h3 id="group-analysis">Group analysis</h3>
 <p>There seems to be a correlation between cortical folds and function. Surface models use these surface features (gyri and sulci) which show correspondence across subjects to improve inter-subject registration which increases the accuracy of group analysis.</p>
 <h3 id="economyefficiency-of-representation">Economy/Efficiency of representation</h3>
@@ -177,6 +183,10 @@ But there is neither Surface nor Volume, Border, nor Area, nor Origin
 <p>The actual vertex and voxel data is stored in row-major format in the file.</p>
 <h2 id="hcp-workbench">HCP Workbench</h2>
 <p>Like freeview will allow us to view GIFTIs and CIFTIs.</p>
+<h2 id="references">References</h2>
+<p>Coalson, T. S., Van Essen, D. C., &amp; Glasser, M. F. (2018). <a href="https://www.pnas.org/content/115/27/E6356.short">The impact of traditional neuroimaging methods on the spatial localization of cortical areas.</a> Proceedings of the National Academy of Sciences, 115(27), E6356-E6365.</p>
+<p>Dickie, E. W., Anticevic, A., Smith, D. E., Coalson, T. S., Manogaran, M., Calarco, N., ... &amp; Voineskos, A. N. (2019). <a href="https://www.sciencedirect.com/science/article/abs/pii/S1053811919303714?via%3Dihub">ciftify: A framework for surface-based analysis of legacy MR acquisitions.</a> Neuroimage, 197, 818-826.</p>
+<p>Glasser, M. F., Sotiropoulos, S. N., Wilson, J. A., Coalson, T. S., Fischl, B., Andersson, J. L., ... &amp; Van Essen, D. C. (2013). <a href="https://pubmed.ncbi.nlm.nih.gov/23668970/">The minimal preprocessing pipelines for the Human Connectome Project.</a> Neuroimage, 80, 105-124.</p>
 <h2 id="appendix-1-volume-vs-surface-model">Appendix 1: Volume vs Surface Model</h2>
 <p>This table was culled from this <a href="https://www.youtube.com/watch?v=KncPouQWAp0">presentation</a>.</p>
 <table>
@@ -213,6 +223,7 @@ But there is neither Surface nor Volume, Border, nor Area, nor Origin
 </tr>
 </tbody>
 </table>
+<p><BR></p>
               
             </div>
           </div>
