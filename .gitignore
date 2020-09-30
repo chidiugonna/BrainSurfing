@@ -11,6 +11,7 @@ presentation/
 todo.md
 
 #data folders and files
+*.zip
 *.pdf
 *.xml
 scripts/

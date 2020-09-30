@@ -3,7 +3,7 @@ clear
 close all
 clc
 addpath ./matlab-library/gifti-release
-
+fprintf('library added to path.\n')
 %% A. Open HCP Native lh pial mesh and cortical thickness overlay
 % read and view the GIFTI surface mesh
 mysurf='./DATA/HCP/100307/MNINonLinear/Native/100307.L.pial.native.surf.gii';
@@ -72,7 +72,7 @@ overlaydata(:,3)= myoverlayleft.cdata(allVerticesMatlab);
 fprintf('The vertices have the following cortical thickness values:\n')
 fprintf('\twb_view Index\tMatlab Index\tCortical Thickness\n')
 fprintf('\t%d\t\t%d\t\t%d\n',overlaydata')
-
+fprintf('cortical thickness values for our selected vertex and close neighbors should match what we saw in wb_view\n')
 %% C set all the vertices to a uniform cortical thickness and  create a new GIFTI file
 % Note we will need to use the Matlab indices
 
@@ -89,7 +89,7 @@ end
 %for efficiency
 %once saved you can try and open it up in wb_view
 save(myoverlayleft,'amended.100307.L.thickness.native.shape.gii','GZipBase64Binary');
-fprintf('Successfully saved amended GIFTI overlay\n')
+fprintf('Successfully saved amended GIFTI overlay amended.100307.L.thickness.native.shape.gii\n')
 
 
 
@@ -98,11 +98,20 @@ fprintf('Successfully saved amended GIFTI overlay\n')
 % A bit of a long-winded way to see the GIFTI header because xmlread cannot cope with !DOCTYPE
 %  save the gifti in ascii format then we can open it in Chrome, Firefox
 save(myoverlayleft,'mygiftioverlay_allxml.gii','ASCII');
+
 % using firefox to look at the XML (firefox will need to be
-% on your path); If you dont have firefox then replace with your browser type - if below doesn't work then just open a broser and open
+% on your path)
+% can aso replace with your own browser or full path to the browser e.g.
+% system('/usr/bin/firefox mygifti_allxml.gii &')
+% system('/usr/bin/chrome mygifti_allxml.gii &')
+% if below doesn't work then just open a broser and open
 % the file in it.
+%
 system('firefox mygiftioverlay_allxml.gii &')
-fprintf('Look in browser to see Gifti XML or open mygiftioverlay_allxml.gii directly in your browser\n')
+
+fprintf('Open mygifti_allxml.gii directly in your browser to view GIFTI XML if it doesnt open up in browser.\n')
+fprintf('For some browsers like chrome you may have to explicitly change the extension to .xml to obtain nice formatting\n')
+
 
 %% OPTIONAL E1
 % Load the XML into a structure for reading
@@ -114,14 +123,13 @@ addpath ./matlab-library/xml2struct
 % To read XML we may need to remove the DOCTYPE line in the xml - this
 % caused errors with my version of matlab 
 % if on unix (Mac, Linux) then use sed command to remove 2nd line which is DOCTYPE 
-
+% this will error on windows - so use powershell instead
 system('sed 2d mygiftioverlay_allxml.gii > mygiftioverlay_xml.gii &')
 
-% if on windows then will need to do this using powershell
-%
-% >> !powershell
-% Get-Content mygifti_allxml.gii  | Where {$_ -notmatch 'DOCTYPE'} | Set-Content mygifti_xml.gii
-% >> exit
+fprintf('if on windows then you will need to remove the 2nd line in the XML either manually or through powershell\n')
+fprintf('start powershell as follows: !powershell\n')
+fprintf("Run this in the shell:  Get-Content mygifti_allxml.gii  | Where {$_ -notmatch 'DOCTYPE'} | Set-Content mygifti_xml.gii\n")
+fprintf("Type exit to return to matlab\n")
 
 %% OPTIONAL E2
 myXML = xml2struct('mygiftioverlay_xml.gii')
@@ -138,7 +146,7 @@ if szarray > 1
 else
      fprintf('Attributes of DataArray')
      myXML.GIFTI.DataArray.Attributes
-     fprintf('Data stored for DataArray %d',arraynum)    
+     fprintf('Data stored for DataArray %d',szarray)    
      myXML.GIFTI.DataArray.Data
 end
 

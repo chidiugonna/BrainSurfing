@@ -3,7 +3,7 @@ clear
 close all
 clc
 addpath ./matlab-library/gifti-release
-
+fprintf('library added to path.\n')
 %% A. Open HCP Native lh pial mesh
 % read and view the GIFTI surface mesh
 mysurf='./DATA/HCP/100307/MNINonLinear/Native/100307.L.pial.native.surf.gii';
@@ -92,11 +92,19 @@ fprintf('Successfully saved amended GIFTI surface\n')
 % A bit of a long-winded way to see the GIFTI header because xmlread cannot cope with !DOCTYPE
 %  save the gifti in ascii format then we can open it in Chrome, Firefox
 save(mysurfleft_mesh,'mygifti_allxml.gii','ASCII');
-% using firefox to look at the XML on mac or linux (firefox will need to be
-% on your path) - if below doesn't work then just open a broser and open
+
+% using firefox to look at the XML (firefox will need to be
+% on your path)
+% can aso replace with your own browser or full path to the browser e.g.
+% system('/usr/bin/firefox mygifti_allxml.gii &')
+% system('/usr/bin/chrome mygifti_allxml.gii &')
+% if below doesn't work then just open a broser and open
 % the file in it.
+%
 system('firefox mygifti_allxml.gii &')
-fprintf('Look in browser to see Gifti XML or open mygifti_allxml.gii directly in your browser\n')
+
+fprintf('Open mygifti_allxml.gii directly in your browser to view GIFTI XML if it doesnt open up in browser.\n')
+fprintf('For some browsers like chrome you may have to explicitly change the extension to .xml to obtain nice formatting\n')
 
 % Notice that data is read in column-major order
 % this means that columns are read before rows
@@ -111,15 +119,14 @@ addpath ./matlab-library/xml2struct
 
 % To read XML we may need to remove the DOCTYPE line in the xml - this
 % caused errors with my version of matlab 
-% if on unix (Mac, Linux) then use sed command to remove 2nd line which is DOCTYPE 
-
+% if on unix (Mac, Linux) then use sed command to remove 2nd line which is DOCTYPE
+% this will error on windows - so use powershell instead
 system('sed 2d mygifti_allxml.gii > mygifti_xml.gii &')
 
-% if on windows then will need to do this using powershell
-%
-% >> !powershell
-% Get-Content mygifti_allxml.gii  | Where {$_ -notmatch 'DOCTYPE'} | Set-Content mygifti_xml.gii
-% >> exit
+fprintf('if on windows then you will need to remove the 2nd line in the XML either manually or through powershell\n')
+fprintf('start powershell as follows: !powershell\n')
+fprintf("Run this in the shell:  Get-Content mygifti_allxml.gii  | Where {$_ -notmatch 'DOCTYPE'} | Set-Content mygifti_xml.gii\n")
+fprintf("Type exit to return to matlab\n")
 
 %% OPTIONAL E2
 
@@ -137,7 +144,7 @@ if szarray > 1
 else
      fprintf('Attributes of DataArray')
      myXML.GIFTI.DataArray.Attributes
-     fprintf('Data stored for DataArray %d',arraynum)    
+     fprintf('Data stored for DataArray %d',szarray)    
      myXML.GIFTI.DataArray.Data
 end
 
