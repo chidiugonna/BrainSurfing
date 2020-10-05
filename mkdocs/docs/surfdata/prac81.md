@@ -617,7 +617,7 @@ Notice also how we have to pinpoint the Right Hemisphere vertex data within `cii
 
 * Select **Volume** view and activate the `amended.rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii` layer. Deselect the T1w_restore_brain.nii.gz layer and any other layer that may be activated in the Volume view. This ensures that the coodinate system of the `amended.rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii` layer, takes precedence in the next step.
 
-* In the **Slice Indices/Coords** section enter in the voxel coordinates of the left hippocampal voxel `56,56,25` in the first column. The cross-hairs should center on that voxel. Zoom in to the voxel by using the mouse scroll wheel.
+* In the **Slice Indices/Coords** section enter in the voxel coordinates of the left hippocampal voxel `56,56,25` in the first column. The cross-hairs should center on that voxel. Zoom in to the voxel by using the mouse scroll wheel. The image below shows an Axial volume view.
 
 ![left hippo voxels](../img/task4_hippovox1.png)
 
@@ -626,11 +626,11 @@ Notice also how we have to pinpoint the Right Hemisphere vertex data within `cii
 
 ![check hippo](../img/task4_hippovox2.png)
 
-* Deactivate the `aparc.a2009s+aseg.nii.gz` layer and now change the `amended.rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii` layer. to `dynconn - rfMRI_REST1_LR_Atlas_hp2000_clean.dynconn`
+* Deactivate the `aparc.a2009s+aseg.nii.gz` layer and now change the `amended.rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii` layer. to `dynconn - amended.rfMRI_REST1_LR_Atlas_hp2000_clean.dynconn`
 
 ![dynconn layer](../img/task4_hippodyncon.png)
 
-* Now change the view to **All**, deactivate the Left cortex to make the left hippocampus more visisble. Activate the right cortex and rotate the brain to view the Right hemisphere  and also activate the `dynconn - rfMRI_REST1_LR_Atlas_hp2000_clean.dynconn` layer. You should be able to identify that the vertices 8470 and 17617 are functionally connected to the hippocampus. This is what we expect as we placed identical fmri values in all these three regions.
+* Now change the view to **All**, deactivate the Left cortex to make the left hippocampus more visisble. Activate the right cortex and rotate the brain to view the Right hemisphere  and also activate the `dynconn - amended.rfMRI_REST1_LR_Atlas_hp2000_clean.dynconn` layer. You should be able to identify that the vertices 8470 and 17617 are functionally connected to the hippocampus. This is what we expect as we placed identical fmri values in all these three regions.
 
 ![full dyn conn](../img/task4_surfdynconn.png)
 
