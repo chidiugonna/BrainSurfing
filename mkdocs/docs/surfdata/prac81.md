@@ -49,7 +49,7 @@ Your folder structure should look like this after extraction.
 ### Matlab libraries
 The Matlab libraries used in this practicum are described below:
 
-* The HCP [cifti-matlab](https://github.com/Washington-University/cifti-matlab) library is in alpha-testing phase and so is liable to change in the future though hopefully not significantly. The version provided  had it's last commit `1e0ca9fbb0f9a8105d144ec6bc0de55b84d1b528` on `Wed Sep 2 15:42:55 2020 -0500`. Please refer to the [cifti-matlab](https://github.com/Washington-University/cifti-matlab) repository for announcements on when the alpha-testing is complete. In the meantime if you use this code for your own research then please appreciate that you do this at your own risk and there is a chance of errors.
+* The HCP [cifti-matlab](https://github.com/Washington-University/cifti-matlab) library was in alpha-testing phase at the time of creating this practicum and so is liable to change in the future though hopefully not significantly. The version provided  had its last commit `1e0ca9fbb0f9a8105d144ec6bc0de55b84d1b528` on `Wed Sep 2 15:42:55 2020 -0500`. Please refer to the [cifti-matlab](https://github.com/Washington-University/cifti-matlab) repository for announcements on when the alpha-testing is complete. In the meantime if you use this code for your own research then please appreciate that you do this at your own risk and there is a chance of errors.
 
 * The [gifti](https://www.artefact.tk/software/matlab/gifti/)  library was downloaded as a zip file `gifti-master.zip`, extracted and renamed to `gifti-release`
 
@@ -68,7 +68,7 @@ The documentation for this practicum has also been bundled with the practicum ma
 * Open **wb_view** either by double-clicking the `wb_view` or `wb_view.exe`  icon in your windows manager or by entering this in the command line if you have set up your paths in the command line interface correctly.
 * When **wb_view** opens click the  `skip` button in the dialog to get to the main screen
 * From the top menu choose `File` > `Open File` and change the dropdown on `Files of type:` to `Surface Files (*.surf.gii)`
-* Now navigate to `Practicum81/DATA/HCP/100307/MNINonLinear/Native/`
+* Now navigate to `practicum81/DATA/HCP/100307/MNINonLinear/Native/`
 * You will be presented with a host of files
 * with the left mouse button click on `100307.L.pial.native.surf.gii`
 * Now pressing the CTRL key (Command key on Mac) again click with the left mouse button on `100307.R.pial.native.surf.gii` to select both surfaces. You should see that both files are reflected in the `File name` textbox. The **pial** that these surfaces refer to is the surface boundary between grey matter and CSF in the outer cortex.
@@ -88,7 +88,7 @@ The documentation for this practicum has also been bundled with the practicum ma
 
 * Switch on edge view by clicking the `Surface` menu option. Choose  `Properties`  and change the `Drawing Type` to `Links (Edges)`. Zoom in a little closer to see the triangular tesselation.
 
-* identify any vertex you like and click on it. For this example I have stumbled upon vertex `119115` which I have decided to probe. A dialog with title **Information** should pop up with vertex information. This dialog provides information about the vertex's hemisphere, label and it's anatomical location in 3D Cartesian (x,y,z) coordinates. Notice also that the white vertex symbol icon is much larger than the width of the edges. 
+* identify any vertex you like and click on it. For this example I have stumbled upon vertex `119115` which I have decided to probe. A dialog with title **Information** should pop up with vertex information. This dialog provides information about the vertex's hemisphere, label and its anatomical location in 3D Cartesian (x,y,z) coordinates. Notice also that the white vertex symbol icon is much larger than the width of the edges. 
 
 ![select vertex first](../img/task1_firstselect.png)
 
@@ -98,7 +98,7 @@ The documentation for this practicum has also been bundled with the practicum ma
 
 * Once you have selected a vertex we can now try and identify its neighbors.
 
-* For the first pass through this practicum you should avoid chossing a vertex on the medial layer as this will cause difficulties in task 4.  To be super safe then just replicate the vertex we have chosen or choose a vertex that is easilly accessible on the lateral surface.
+* For the first pass through this practicum you should avoid choosing a vertex on the medial layer as this will cause difficulties in task 4.  To be super safe then just replicate the vertex we have chosen or choose a vertex that is easilly accessible on the lateral surface.
 
 * The medial layer contains vertices that are not actually on the cortical surface (actually these medial-layer vertices cut through subcortical grey matter structures and the Corpus callosum) but are required to maintain the spherical topology of the surface.  
 
@@ -343,7 +343,7 @@ We have been able to work with and manipulate **GIFTI surface files**. In this t
 
 ![plot overlay on mesh](../img/task3_overlaymesh.png)
 
-* In **Section B** we see a print out of the cortical thickness values at our neighbouring vertices which should match the values we identifed in **wb_view**. In **Section C** we set all the thicknesses to a uniform value of 2mm and then save a copy called 
+* In **Section B** we see a print out of the cortical thickness values at our neighbouring vertices which should match the values we identifed in **wb_view**. In **Section C** we set the thicknesses of our **chosen vertex and its neighbors** to a uniform value of 2mm and then save a copy called 
 `amended.100307.L.thickness.native.shape.gii`.
 
 * Return to wb_view and open the `amended.100307.L.thickness.native.shape.gii` overlay. Compare this with the original  `100307.L.thickness.native.shape.gii` overlay and confirm that all the vertices now have a thickness value of 2mm.
@@ -362,7 +362,7 @@ We have been able to work with and manipulate **GIFTI surface files**. In this t
 
 ## Task 4: Use Matlab to manipulate and visualize CIFTI files
 
-So far we have learned to work with GIFTI files. In this penultimate task we are going to work with CIFTI files which combine both volume data for subcortical structures and surface data for cortical structures into one file. Unfortunately the HCP's Matlab library is still in [Alpha testing](https://github.com/Washington-University/cifti-matlab) and so we need to be aware that there is a slight chance that the coding conventions used here may change however the overal conceptual approach should remain the same.
+So far we have learned to work with GIFTI files. In this penultimate task we are going to work with CIFTI files which combine both volume data for subcortical structures and surface data for cortical structures into one file. Unfortunately the HCP's Matlab library was still in [Alpha testing](https://github.com/Washington-University/cifti-matlab) at the time of creating this practicum and so we need to be aware that there is a slight chance that the coding conventions used here may change however the overal conceptual approach should remain the same.
 
 We will work with HCP data again and this time with CIFTI cortical thickness data `100307.thickness.native.dscalar.nii` from the left and right cortex. 
 
@@ -504,13 +504,13 @@ To visualize CIFTI data in **wb_view** we need a GIFTI surface file that is asso
 
 * select the **All** view and then load in the fMRI `dtseries.nii` CIFTI file `rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii` from the location `DATA/HCP/100307/MNINonLinear/Results/rfMRI_REST1_LR/`.
 
-* Change the file overlay from `dynconn - rfMRI_REST1_LR_Atlas_hp2000_clean.dynconn` to the dtseries `rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii` and switch on the overlay to see the first time points of the resting state fMRI series.
+* Change the file overlay from `dynconn - rfMRI_REST1_LR_Atlas_hp2000_clean.dynconn` to the dtseries `rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii` and switch on the overlay to see the first volume of the resting state fMRI series which has an index of 1 and a Map value of 0 seconds.
 
-* Rotate the brain. Notice that their are values in both the cortex and in free floating voxels which represent the subcortex.
+* Rotate the brain to get a better view of the fMRI data. Notice that there are values in both the cortex (surface-based data represented by vertices) and in the subcortex (volume-based data represented by voxels).
 
 ![cifti fmri](../img/task4_ciftifmri.png)
 
-* To navigate the volume data more conveniently you can click on the **Volume** view to access the traditional volume viewing interface. In **Slice Plane** pane (not the View Pane!) you can select **All** to view Axial, Parasagittal and Coronal planes at the same time.
+* To navigate the volume-based data more conveniently you can click on the **Volume** view to access the traditional volume viewing interface. In **Slice Plane** pane (not the View Pane!) you can select **All** to view Axial, Parasagittal and Coronal planes at the same time.
 
 * Again you will need to switch on the overlay and choose `rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii` over the `dynconn...` overlay. You can move through volume slices by holding the left mouse button and dragging the mouse. You can zoom in by using the mouse scroll wheel. 
 
@@ -545,7 +545,7 @@ To visualize CIFTI data in **wb_view** we need a GIFTI surface file that is asso
 
 * Run Section **A** to see how the CIFTI XML has different sections for surfaces and for voxels. Note that each volume structure has an individual label e.g CIFTI_STRUCTURE_ACCUMBENS_LEFT. As you did in **Task 4** you can query the XML directly in the structure `ciixml` and also compare this with the data that has been stored in the data structure `ciiall` by the HCP Matlab library. 
 
-* The output that is displayed in the command window is obtained by going through the XML file. It shows that information about voxels and vertices are stored at the same time in the XML file and that the actual overlay data for each vertex and voxel is indexed sequentially in the NIFTI-2 file. So for example with our CIFTI file if we read off a value at row position 59695 in the data array this will be a value in AMYGDALA_LEFT (between 59688 abd 60002)
+* The output that is displayed in the command window is obtained by going through the XML file. It shows that information about voxels and vertices are stored at the same time in the XML file and that the actual overlay data for each vertex and voxel is indexed sequentially in the NIFTI-2 file. So for example with our CIFTI file if we read off a value at row position 59695 in the data array then this will be a value in AMYGDALA_LEFT (between 59688 and 60002)
 
         ...
         Model 1 is a surface of CORTEX_LEFT with  29696  verts valued out of 32492 vertices; start from 1 and end at 29696
@@ -602,19 +602,22 @@ Notice also how we have to pinpoint the Right Hemisphere vertex data within `cii
 * Now let's return to **wb_view**. It might be easier to close all files and then load in the following files:
 
 * From `/DATA/HCP/100307/MNINonLinear/fsaverage_LR32k/` load in the following:
-`100307.R.midthickness.32k_fs_LR.surf.gii` 
-`100307.L.midthickness.32k_fs_LR.surf.gii`
-`100307.R.aparc.a2009s.32k_fs_LR.label.gii`, and
-`100307.L.aparc.a2009s.32k_fs_LR.label.gii`,
+
+    * `100307.R.midthickness.32k_fs_LR.surf.gii` ,
+    * `100307.L.midthickness.32k_fs_LR.surf.gii`, and
+    * `100307.R.aparc.a2009s.32k_fs_LR.dlabel.nii`
 
 * From `/DATA/HCP/100307/MNINonLinear/` load in the following:
-`aparc.a2009s+aseg.nii.gz` and 
-`T1w_restore_brain.nii.gz`
+
+    * `aparc.a2009s+aseg.nii.gz` and 
+    * `T1w_restore_brain.nii.gz`
 
 * Finally we can now load in the amended fMRI from the current directory `amended.rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii`
 
 
-* Select **Volume** view and activate the `amended.rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii` layer. In the **Slice Indices/Coords** section enter in the voxel coordinates of the left hippocampal voxel `56,56,25` in the first column. The cross-hairs should center on that voxel. Zoom in to the voxel by using the mouse scroll wheel.
+* Select **Volume** view and activate the `amended.rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii` layer. Deselect the T1w_restore_brain.nii.gz layer and any other layer that may be activated in the Volume view. This ensures that the coodinate system of the `amended.rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii` layer, takes precedence in the next step.
+
+* In the **Slice Indices/Coords** section enter in the voxel coordinates of the left hippocampal voxel `56,56,25` in the first column. The cross-hairs should center on that voxel. Zoom in to the voxel by using the mouse scroll wheel.
 
 ![left hippo voxels](../img/task4_hippovox1.png)
 

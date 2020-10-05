@@ -23,7 +23,7 @@ fprintf('libraries added to path.\n')
 %
 ciftioverlay='./DATA/HCP/100307/MNINonLinear/Results/rfMRI_REST1_LR/rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii';
 ciiall = traverse_cifti(ciftioverlay);
-ciixml = get_cifti_xml(ciftioverlay,'/usr/bin/firefoxchop');
+ciixml = get_cifti_xml(ciftioverlay,'/usr/bin/firefox');
 %run code as follows if firefox not on path - pass in full path to firefox
 %or alternate browser
 %ciixml = get_cifti_xml(ciftioverlay,'/usr/bin/firefox');
