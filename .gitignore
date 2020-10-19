@@ -6,6 +6,10 @@ Archives/
 references/
 software/
 presentation/
+helper-scripts/
+practicum91_OLD/
+backup-practicum91/
+output/
 
 #specific files
 todo.md
@@ -19,6 +23,7 @@ matlab-library/
 data/
 DATA/
 DATABACK/
+DATA-BACK/
 exampleData/
 *.jpg
 *.png

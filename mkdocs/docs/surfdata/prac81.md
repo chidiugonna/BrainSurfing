@@ -3,7 +3,7 @@
 ## Synopsis
 Surface-based data formats represent neuroimaging data in two main forms namely *meshes* and *overlays*. In both cases anatomical locations are represented by *vertices* which are arbitrary points in 3D space.
 
-Surface *meshes* store 2 main types of information - the Cartesian location (x, y, z) of each vertex in 3D space and the triplet of vertex indices that make up a triangular face on the mesh.   
+Surface *meshes* store 2 main types of information - the Cartesian location (x, y, z) of each vertex in 3D space and the triple of vertex indices that make up a triangular face on the mesh.   
 
 Surface *overlays* store attributes for each vertex. These attributes could be single value scalars like the cortical thickness at a vertex or a series of values like a time series  from an fMRI or EEG experiment.
 
@@ -20,7 +20,7 @@ This practicum will introduce you to working with surface-based data (meshes and
     Some of the tasks you will accomplish with this practicum will not ordinarily be part of your typical neuroimaging analysis workflow. For example you will rarely if ever need to change the topology of a surface mesh. However the intention of these exercises is to cement your understanding of these formats by giving you hands-on experience with manipulating them albeit in somewhat artificial scenarios.
 
 ## Downloads/Installation
-This practicum requires the following materials/folder setup to work to complete:
+This practicum requires the following materials/folder setup for successful complete:
 
 * A reasonably recent version of [matlab](https://www.mathworks.com/). The practicum was tested on version R2020a (linux), R2019a (windows) and R2018b (Mac) but should hopefully work on older versions as well.
 * A copy of the HCP's [Connectome workbench](https://www.humanconnectome.org/software/get-connectome-workbench). We will be using `wb_view` for viewing CIFTI and GIFTI files. The install is a zip file that you extract and the executable should be available after extraction. Depending on your platform you may need to double-click the `wb_view` icon or add it to your path to access via the command line. Copies of workbench have also been packaged up at the [Classhare](https://drive.google.com/drive/u/0/folders/1pFMXo5nn5oRlSNsZVpT5ZKdG6Hi5aUVw) for this lesson under the **Software** folder which you can access if you have trouble getting to the connectome site. There are 4 zip files with names that start with `workbench-..` for different OS platforms.
@@ -654,14 +654,13 @@ This concludes this introduction to the GIFTI and CIFTI formats. This practicum 
 
 To gain more experience using **wb_view** then material from from the [HCP 2018 Course](https://wustl.app.box.com/s/baq0i7xeqe9qblzfyrd3xo6ifawv8j58) and the  [HCP's Connectome Workbench v1.0 Tutorial](https://www.humanconnectome.org/storage/app/media/documentation/tutorials/Connectome_WB_Tutorial_v1.0.pdf) might be useful.
 
-Fmriprep produces a host of useful surface-related files during processing. To explore some of these surface-based outputs you can download examples from Dianne Patterson's [Neuromaging_Core OSF site](https://osf.io/bwvm7/)
-
-
 Please provide any corrections and suggestions by [email](mailto:chidiugonna@arizona.edu) or as issues on [GitHub](https://github.com/chidiugonna/BrainSurfing)
 
 ## Acknowledgements
 
 Huge thanks to Dianne Patterson for all her incredibly helpful comments and hard work testing this practicum. While all errors are mine, this exercise would have been much poorer without her support and insights.
+
+Thanks also to Tim Coalson for important clarifications on terminology, insight into the mex issue and also for pointing out efficient ways for using the **cifti-matlab** library. I am working to include these changes as soon as possible.
 
 ## Troubleshooting
 
