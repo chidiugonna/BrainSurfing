@@ -37,9 +37,9 @@ This practicum requires the following materials/folder setup for successful comp
 
 !!! Note
 
-    We will be running the scripts using  the docker container as shown below. For each script a command line will be provided which you will be able to copy and paste into your terminal window.
+    We will be running the scripts using  the docker container as shown below. For each script a command line will be provided which you will be able to copy and paste into your terminal window. Try to avoid extracting the zip folder into a root directory that has spaces in it to avoid problems with binding the current directory $PWD. If you do have to use a root directory with spaces in it then you can use single quotes in the bind as follows `-v '${PWD}':/mnt`. Double quotes might also work `-v "${PWD}":/mnt.`
 
-    docker run -v $PWD:/mnt --rm -it --entrypoint **bash** tigrlab/fmriprep_ciftify:v1.3.2-2.3.3 /mnt/**SCRIPTNAME**
+    docker run -v ${PWD}:/mnt --rm -it --entrypoint **bash** tigrlab/fmriprep_ciftify:v1.3.2-2.3.3 /mnt/**SCRIPTNAME**
 
 * The data and scripts for this practicum can be downloaded from [Classhare](https://drive.google.com/drive/u/1/folders/1xtuQtcPFXFI3wDs2uj6L9p0yd9bagEY5) folder under the **practicum91** folder in a zip file **practicum91.zip**. Download this zip file to your local computer and extract.
 * The practicum files can also alternatively be downloaded as a zip file from [OSF](https://osf.io/hetgq/) in the folder **09-Surface-Based-Analysis**
@@ -84,18 +84,19 @@ The data was processed initially through *FMRIPrep* to create aligned fMRI volum
 * Run the `001_inflate.sh` script through the docker image as follows:
 
 ```
-docker run -v $PWD:/mnt --rm -it --entrypoint bash tigrlab/fmriprep_ciftify:v1.3.2-2.3.3 /mnt/001_inflate.sh
+docker run -v ${PWD}:/mnt --rm -it --entrypoint bash tigrlab/fmriprep_ciftify:v1.3.2-2.3.3 /mnt/001_inflate.sh
 
 ```
 
 * The script creates the **midthickness** layer `amended.sub-01.L.midthickness.32k_fs_LR.surf.gii` in the directory `practicum91/output/sub-01`. This layer lies between the **pial** and the **white** layer and is created using  `wb_command -surface-average`. This layer is useful for projecting functional data from the volume onto the cortex.
 
 * The script also creates an **inflated** and a  **very_inflated** layer in the same directory using `wb_command -surface-generate-inflated`. These layers allow functional areas to be better visualized in the cortex.
-* If you want to peform this on subject 02 as well then just change the subject variable on line 27 in `001_inflate.sh` using a simple text editor, as follows `SUB=sub-02` and rerun the docker command.
 
 !!! Note
 
-    The steps below refer to sub-01. To perform these steps on subject 02 then just replace sub-01 by sub-02 in every file that is mentioned below.
+    The script generates the inflated surfaces from the midthickness layer. This is not strictly how it's done in Freesurfer which instead uses the white surface to create the inflated surfaces.
+
+* If you want to peform this on subject 02 as well then just change the subject variable on line 27 in `001_inflate.sh` using a simple text editor, as follows `SUB=sub-02` and rerun the docker command.
 
 * Open **wb_view** and navigate to `./DATA/sub-01/MNINonLinear/` and load in `T1w.nii.gz`. Now navigate up one folder to `fsaverage_LR32k` and load in the two surfaces `sub-01.L.pial.32k_fs_LR.surf.gii` and `sub-01.L.white.32k_fs_LR.surf.gii`
 * Now load in the midthickness layer you created `amended.sub-01.L.midthickness.32k_fs_LR.surf.gii` from `./output/sub-01`
@@ -106,10 +107,12 @@ docker run -v $PWD:/mnt --rm -it --entrypoint bash tigrlab/fmriprep_ciftify:v1.3
 
 
 * Now we will see how the inflated and very_inflated layers better help us visualize cortical areas. We will also look at the flat layer and a spherical layer that are provided by the HCP's pipelines.
-* In **wb_view** now load in the inflated and very_inflated layers from from `./output/sub-01`. Navigate to `./DATA/MMP_HCP` and load in all 4 files that you see there. This is the Human Connectome's [Multi-modal Parcellation of Human Cerebral Cortex](https://balsa.wustl.edu/study/show/RVVG) [Glasser et al. 2016]. You might need to change **Files of Type:** to  `Any File (*)` to be able to see them all.
+* In **wb_view** now load in the inflated `amended.sub-01.L.inflated.32k_fs_LR.surf.gii` and very_inflated layers `amended.sub-01.L.very_inflated.32k_fs_LR.surf.gii` from from `./output/sub-01`.
+* Navigate to `./DATA/MMP_HCP` and load in all 4 files that you see there. This is the Human Connectome's [Multi-modal Parcellation of Human Cerebral Cortex](https://balsa.wustl.edu/study/show/RVVG) [Glasser et al. 2016]. You might need to change **Files of Type:** to  `Any File (*)` to be able to see them all.
+* These files are `Q1-Q6_RelatedValidation210.CorticalAreas_dil_Final_Final_Areas_Group_Colors.32k_fs_LR.dlabel.nii`, `Q1-Q6_RelatedValidation210.L.CorticalAreas_dil_Final_Final_Areas_Group.32k_fs_LR.border`, `Q1-Q6_RelatedValidation210.R.CorticalAreas_dil_Final_Final_Areas_Group.32k_fs_LR.border` and `MMP_areas_tangential_32k_bothHems_inflated.wb_annot`
 * Finally navigate to `./Data/100307`  and load in `100307.L.flat.32k_fs_LR.surf.gii` and `100307.L.sphere.32k_fs_LR.surf.gii`
 * Click on **Surface View**
-* Activate  the `Q1-Q6_RelatedValidation..` layer by clicking it's checkbox **On** 
+* Activate  the `Q1-Q6_RelatedValidation210.CorticalAreas_dil_Final_Final_Areas_Group_Colors.32k_fs_LR.dlabel.nii` layer by clicking it's checkbox **On** 
 * In the **Brain Structures and Surface** panel, change the surfaces in turn using the drop down box to see how the Multi Modal Parcellations are rendered on the surface.
 * Notice how the inflated layers allow you to see cortical areas normally buried in the sulci. Also notice how the flat layer allows you to see both the medial and lateral surfaces at the same time.
 
@@ -128,7 +131,7 @@ docker run -v $PWD:/mnt --rm -it --entrypoint bash tigrlab/fmriprep_ciftify:v1.3
 * Run the `002_register.sh` script through the docker image as follows:
 
 ```
-docker run -v $PWD:/mnt --rm -it --entrypoint bash tigrlab/fmriprep_ciftify:v1.3.2-2.3.3 /mnt/002_register.sh
+docker run -v ${PWD}:/mnt --rm -it --entrypoint bash tigrlab/fmriprep_ciftify:v1.3.2-2.3.3 /mnt/002_register.sh
 
 ```
 
@@ -140,14 +143,18 @@ docker run -v $PWD:/mnt --rm -it --entrypoint bash tigrlab/fmriprep_ciftify:v1.3
     * Using `wb_command -surface-resample` we resample the midthickness surface from native space to the new standard space. This new midthickness surface is called ../DATA/sub-01/amended.sub-01.L.midthickness.164k_fs_LR.surf.gii
     * Using `wb_command -metric-resample` we resample the left cortical thickness overlay onto the new left midthickness surface in 164k_fs_LR space.
 
-* Change the script so that the other subject is now processed. Change `line 30` to point to the new subject (`SUB=sub-01`) and rerun the docker command.
+* Change the script so that the other subject is now processed. Change `line 30` to point to the new subject (`SUB=sub-02`) and rerun the docker command.
 
 * In wb_view, select **File** > **Close All Files** and then open the two resampled surfaces for both subjects i.e. `./output/sub-01/sub-01.L.midthickness.164k_fs_LR.surf.gii` and `./output/sub-02/sub-02.L.midthickness.164k_fs_LR.surf.gii` - notice that because both surfaces are registered to the 164K template they have exactly the same number of vertices and that their vertices are in correspondence. Select **Montage** view and deselct the **Medial** checkbox. Ensure that in the *Montage Selection* both checkboxes are selected and that both surfaces are represented.  Click on either subjects surface mesh to select a vertex and notice that a corresponding vertex is identified on the surface of the other subject. These subject meshes are in vertex correspondence as they have been registered to the same template.
 
 ![midthickness](../img/003_register_compare_landmarks.png)
 
-* One dramatic way to see how features generalize across subjects is to view the sulc overlay on the sphere. Again **Close all Files** in your current instance of **wb_view**. Now open another separate instance of **wb_view** so that you have two copies of the program running at the same time. In both instances open the standard sphere in `./DATA/config/fsaverage.L_LR.spherical_std.164k_fs_LR.surf.gii`. In one instance open the resampled sulc overlay `amended.sub-01.L.sulc.164k_fs_LR.shape.gii` for subject 01 and in the other instance open the resampled sulc overlay `amended.sub-02.L.sulc.164k_fs_LR.shape.gii
-` for subject 02. Activate both overlays  and click on **Reset** if your exploration brings your spheres out of sync to bring them back to the default start. Notice the similarity in the sulcal maps between both subjects.
+* One dramatic way to see how features generalize across subjects is to view the sulc overlay on the sphere. Again **Close all Files** in your current instance of **wb_view**. Now open another separate instance of **wb_view** so that you have two copies of the program running at the same time. In both instances open the standard sphere in `./DATA/config/fsaverage.L_LR.spherical_std.164k_fs_LR.surf.gii`. In one instance open the resampled sulc overlay that was created by the script at  `./output/sub-01/amended.sub-01.L.sulc.164k_fs_LR.shape.gii` for subject 01 and in the other instance open the resampled sulc overlay `./output/sub-02/amended.sub-02.L.sulc.164k_fs_LR.shape.gii
+` for subject 02. Activate both overlays  and click on **Reset** if your exploration brings your spheres out of sync to bring them back to the default start. The image below uses the **Surface** view to compare hemispheres however you might want to experiment with the **Montage** view. Notice the similarity in the sulcal maps between both subjects as you explore both spheres.
+
+!!! Information
+
+    The sulcal overlay calculates the signed distance that any vertex needs to travel to reach its position in the fully inflated surface. Sulcal vertices will thus have positive numbers and gyral vertices will have negative numbers. This sulcal map is remarkable similar across subjects and is thus a good measure for driving surface-based registration.
 
 ![midthickness](../img/003_register_compare_spheres.png)
 
@@ -159,21 +166,21 @@ docker run -v $PWD:/mnt --rm -it --entrypoint bash tigrlab/fmriprep_ciftify:v1.3
 * Run the `003_projection.sh` script through the docker image as follows:
 
 ```
-docker run -v $PWD:/mnt --rm -it --entrypoint bash tigrlab/fmriprep_ciftify:v1.3.2-2.3.3 /mnt/003_projection.sh
+docker run -v ${PWD}:/mnt --rm -it --entrypoint bash tigrlab/fmriprep_ciftify:v1.3.2-2.3.3 /mnt/003_projection.sh
 ```
 
 * This script uses `wb_command -volume-to-surface-mapping` to project the volumetric NIFTI-1 functional MRI data at  `./DATA/MNINonLinear/Results/task-rhymejudgment/task-rhymejudgment.nii.gz` onto the midthickness layer you created in task 1.
 
 * in wb_view, select **File** > **Close All Files** and then  open the midthickness layer you created in task 1  `amended.sub-01.L.midthickness.32k_fs_LR.surf.gii` from `./output/sub-01` and then open the projected surface overlay  `sub-01.L.midthickness.32k_fs_LR.func.gii` which is in the same directory.
 
-* Notice that the functional MRI has been sampled on the surface. You can cycle through the different volumes by clicking the time index next to the *Yoke* column in the Overlay Toolbox. Unfortunately we are little limited in what we can do with this GIFTI functional overlay in wb_view. 
+* Change the file from `metricdynconn - sub-01....` to  the `sub-01.L.midthickness.32k_fs_LR.func.gii` layer in the overlay toolbox. Notice that the functional MRI has been successfully projected on the surface. You can cycle through the different volumes by clicking the time index next to the *Yoke* column in the Overlay Toolbox. Unfortunately we are little limited in what we can do with this GIFTI functional overlay in wb_view. 
 
 ![midthickness](../img/005_projection.png)
 
 * For example we cannot access the functional data values at individual timepoints (instead we see a long list of all the time values) and also each time point is labelled with 'ribbon constrained' rather than the unique time value in seconds.
 ![midthickness](../img/005_projection_list.png)
 
-* We do have access to the connectivity layer which is created on the fly but we won't be able to see how the left cortex is connected to the right cortex or to sub-cortical structures at the same time. In the next task we will address the shortcomings of using the GIFTI overlay by creating a CIFTI file which will combine data from both surfaces and subcortical structures into one file.
+* We do have access to the connectivity layer `metricdynconn - sub-01....` which is created on the fly but we won't be able to see how the left cortex is connected to the right cortex or to sub-cortical structures at the same time. In the next task we will address the shortcomings of using the GIFTI overlay by creating a CIFTI file which will combine data from both surfaces and subcortical structures into one file.
 
 ![midthickness](../img/006_connectivity.png)
 
@@ -188,20 +195,22 @@ docker run -v $PWD:/mnt --rm -it --entrypoint bash tigrlab/fmriprep_ciftify:v1.3
 * Run the `004_ciftigen.sh` script through the docker image as follows:
 
 ```
-docker run -v $PWD:/mnt --rm -it --entrypoint bash tigrlab/fmriprep_ciftify:v1.3.2-2.3.3 /mnt/004_ciftigen.sh
+docker run -v ${PWD}:/mnt --rm -it --entrypoint bash tigrlab/fmriprep_ciftify:v1.3.2-2.3.3 /mnt/004_ciftigen.sh
 ```
 
 * This script continues the process of projecting the volume data onto the Right midthickness surface and then samples the sub-cortical data using a sub-cortical mask that covers the key grey-matter areas of the brain. 
 
 * The script then uses `wb_command -cifti-create-dense-timeseries` to combine the data on the 2 surfaces and on the sub-cortical layer into a CIFTI file.
 
-* Open the the left `amended.sub-01.L.midthickness.32k_fs_LR.surf.gii`and right `amended.sub-01.R.midthickness.32k_fs_LR.surf.gii` midthickness surfaces and the newly created CIFTI functional MRI overlay,  `created.den-91k.sub-01_rest.dtseries.nii` which are available in `./output/sub-01`. The CIFTI functional overlay provides advantages for viewing and manipulating neuroimaging data.
+* From `./output/sub-01` open the the left `amended.sub-01.L.midthickness.32k_fs_LR.surf.gii`and right `amended.sub-01.R.midthickness.32k_fs_LR.surf.gii` midthickness surfaces and the newly created CIFTI functional MRI overlay,  `created.den-91k.sub-01_rest.dtseries.nii`. The CIFTI functional overlay provides advantages for viewing and manipulating neuroimaging data.
 
-* Click on **All** View and notice that we can see the functional data for both hemispheres (surface-based vertices) as well as for the subcortical structures (volumetric voxels) at the same time.
+* Click on **All** View and change the file from `dynconn - created....` to  the `created.den-91k.sub-01_rest.dtseries.nii` layer in the overlay toolbox
+
+* Notice that we can see the functional data for both hemispheres (surface-based vertices) as well as for the subcortical structures (volumetric voxels) at the same time.
 
 ![midthickness](../img/007_ciftifmri.png)
 
-* We can also visualize the connectivity between all voxels and vertices at the same time. 
+* We can also visualize the connectivity between all voxels and vertices at the same time by changing to the `dynconn - created....`  layer. 
 
 ![midthickness](../img/007_ciftifmri_conn.png)
 
@@ -212,19 +221,27 @@ docker run -v $PWD:/mnt --rm -it --entrypoint bash tigrlab/fmriprep_ciftify:v1.3
 * Run the `005_smoothing.sh` script through the docker image as follows:
 
 ```
-docker run -v $PWD:/mnt --rm -it --entrypoint bash tigrlab/fmriprep_ciftify:v1.3.2-2.3.3 /mnt/005_smoothing.sh
+docker run -v ${PWD}:/mnt --rm -it --entrypoint bash tigrlab/fmriprep_ciftify:v1.3.2-2.3.3 /mnt/005_smoothing.sh
 ```
 
 * This script simply uses `wb_command -cifti-smoothing` to spatially smooth our CIFTI fmri file using a gaussian kernel.
 
-* Open Surfaces `amended.sub-01.L.midthickness.32k_fs_LR.surf.gii` and `amended.sub-01.R.midthickness.32k_fs_LR.surf.gii`
-* Now open `created.den-91k.sub-01_rest.dtseries.nii` and `created.den-91k.sub-01_rest.smoothed.dtseries.nii`
+* From `./output/sub-01` open Surfaces `amended.sub-01.L.midthickness.32k_fs_LR.surf.gii` and `amended.sub-01.R.midthickness.32k_fs_LR.surf.gii`
+* Now also open `created.den-91k.sub-01_rest.dtseries.nii` and `created.den-91k.sub-01_rest.smoothed.dtseries.nii`
 * In the **All** or **Surface** view activate the smoothed and non-smoothed layers. Click the top layer off and on to see the blurring effect that spatial smoothing has on the data on the cortical surface. Spatial smoothing helps to reduce the deleterious impact of noise by smoothening peaks in the signal and boosting troughs. However this also has the effect of decreasing the spatial resolution of the data. Conservative use of spatial smoothing is advised [Coalson et al. 2018]. The HCP uses a gaussian kernel of 2mm for smoothing its functional data. If region of interest approaches are used to analyze data then smoothing can be avoided altogether.
 
 ![midthickness](../img/008_vertsmooth.png)
 
 * In the **Volume** view observe the same effect for the sub-cortical voxels.
 ![midthickness](../img/008_voxsmooth.png)
+
+## Extra Time?
+If you have got through this quickly then here are some additional things to try:
+
+* See if you can adapt the code to work for all the right hemisphere meshes and overlays.
+* Generate all the surfaces and overlays for subject 02.
+* Get the MSM algorithm to go through its paces in Task 2 by changing the variable `BYPASS="Y"` to `BYPASS="N"`
+* Create your own script and try out different [wb_commands](https://www.humanconnectome.org/software/workbench-command)
 
 ## Final words
 
