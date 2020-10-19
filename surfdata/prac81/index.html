@@ -102,6 +102,11 @@
     </ul>
                     </li>
                 </ul>
+                <p class="caption"><span class="caption-text">Surface Analysis</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../surfanalysis/prac91/">practicum 9.1</a>
+                    </li>
+                </ul>
       </div>
     </div>
     </nav>
@@ -141,7 +146,7 @@
                 <h1 id="practicum-81-surface-based-data-formats">Practicum 8.1 -  Surface-Based Data Formats</h1>
 <h2 id="synopsis">Synopsis</h2>
 <p>Surface-based data formats represent neuroimaging data in two main forms namely <em>meshes</em> and <em>overlays</em>. In both cases anatomical locations are represented by <em>vertices</em> which are arbitrary points in 3D space.</p>
-<p>Surface <em>meshes</em> store 2 main types of information - the Cartesian location (x, y, z) of each vertex in 3D space and the triplet of vertex indices that make up a triangular face on the mesh.   </p>
+<p>Surface <em>meshes</em> store 2 main types of information - the Cartesian location (x, y, z) of each vertex in 3D space and the triple of vertex indices that make up a triangular face on the mesh.   </p>
 <p>Surface <em>overlays</em> store attributes for each vertex. These attributes could be single value scalars like the cortical thickness at a vertex or a series of values like a time series  from an fMRI or EEG experiment.</p>
 <h2 id="objectives">Objectives</h2>
 <p>This practicum will introduce you to working with surface-based data (meshes and overlays) using the GIFTI and CIFTI file formats. By the end of this practicum you should</p>
@@ -156,7 +161,7 @@
 <p>Some of the tasks you will accomplish with this practicum will not ordinarily be part of your typical neuroimaging analysis workflow. For example you will rarely if ever need to change the topology of a surface mesh. However the intention of these exercises is to cement your understanding of these formats by giving you hands-on experience with manipulating them albeit in somewhat artificial scenarios.</p>
 </div>
 <h2 id="downloadsinstallation">Downloads/Installation</h2>
-<p>This practicum requires the following materials/folder setup to work to complete:</p>
+<p>This practicum requires the following materials/folder setup for successful complete:</p>
 <ul>
 <li>A reasonably recent version of <a href="https://www.mathworks.com/">matlab</a>. The practicum was tested on version R2020a (linux), R2019a (windows) and R2018b (Mac) but should hopefully work on older versions as well.</li>
 <li>A copy of the HCP's <a href="https://www.humanconnectome.org/software/get-connectome-workbench">Connectome workbench</a>. We will be using <code>wb_view</code> for viewing CIFTI and GIFTI files. The install is a zip file that you extract and the executable should be available after extraction. Depending on your platform you may need to double-click the <code>wb_view</code> icon or add it to your path to access via the command line. Copies of workbench have also been packaged up at the <a href="https://drive.google.com/drive/u/0/folders/1pFMXo5nn5oRlSNsZVpT5ZKdG6Hi5aUVw">Classhare</a> for this lesson under the <strong>Software</strong> folder which you can access if you have trouble getting to the connectome site. There are 4 zip files with names that start with <code>workbench-..</code> for different OS platforms.</li>
@@ -868,10 +873,10 @@ ans =
 <h2 id="final-words">Final words</h2>
 <p>This concludes this introduction to the GIFTI and CIFTI formats. This practicum has used Matlab libraries to query, read and write Surface-Based formats however there are other approaches like the Python-based NiBabel library which provides functions for working with <a href="https://nipy.org/nibabel/reference/nibabel.cifti2.html">Cifti</a> and <a href="https://nipy.org/nibabel/reference/nibabel.gifti.html">Gifti</a> files. </p>
 <p>To gain more experience using <strong>wb_view</strong> then material from from the <a href="https://wustl.app.box.com/s/baq0i7xeqe9qblzfyrd3xo6ifawv8j58">HCP 2018 Course</a> and the  <a href="https://www.humanconnectome.org/storage/app/media/documentation/tutorials/Connectome_WB_Tutorial_v1.0.pdf">HCP's Connectome Workbench v1.0 Tutorial</a> might be useful.</p>
-<p>Fmriprep produces a host of useful surface-related files during processing. To explore some of these surface-based outputs you can download examples from Dianne Patterson's <a href="https://osf.io/bwvm7/">Neuromaging_Core OSF site</a></p>
 <p>Please provide any corrections and suggestions by <a href="mailto:chidiugonna@arizona.edu">email</a> or as issues on <a href="https://github.com/chidiugonna/BrainSurfing">GitHub</a></p>
 <h2 id="acknowledgements">Acknowledgements</h2>
 <p>Huge thanks to Dianne Patterson for all her incredibly helpful comments and hard work testing this practicum. While all errors are mine, this exercise would have been much poorer without her support and insights.</p>
+<p>Thanks also to Tim Coalson for important clarifications on terminology, insight into the mex issue and also for pointing out efficient ways for using the <strong>cifti-matlab</strong> library. I am working to include these changes as soon as possible.</p>
 <h2 id="troubleshooting">Troubleshooting</h2>
 <h3 id="wb_view-prevented-from-running-in-windows">wb_view prevented from running in Windows</h3>
 <p>In windows 10 you may get a warning dialog stating that <strong>Windows protected your PC</strong> when you try to run wb_view.exe. If you downloaded this directly from the HCP website then you should be reassured that this is safe. Just click on <u>More Info</u> and then <strong>Run anyway</strong>.</p>
@@ -895,6 +900,8 @@ dlopen(/Practicum81/matlab-library/cifti-matlab/ft_cifti/@xmltree/private/xml_fi
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../surfanalysis/prac91/" class="btn btn-neutral float-right" title="practicum 9.1">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
         <a href="../../about/" class="btn btn-neutral" title="About"><span class="icon icon-circle-arrow-left"></span> Previous</a>
@@ -925,6 +932,8 @@ dlopen(/Practicum81/matlab-library/cifti-matlab/ft_cifti/@xmltree/private/xml_fi
       
         <span><a href="../../about/" style="color: #fcfcfc;">&laquo; Previous</a></span>
       
+      
+        <span style="margin-left: 15px"><a href="../../surfanalysis/prac91/" style="color: #fcfcfc">Next &raquo;</a></span>
       
     </span>
 </div>
