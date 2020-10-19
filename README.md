@@ -10,10 +10,10 @@ Links to the documentation for the lessons are provided below:
 
 <!-- [Lesson 8](surfdata/introformats.md): Introduction to Surface-based Formats -->
 
-[Practicum 8.1](https://chidiugonna.github.io/BrainSurfing/surfdata/prac81/): Surface Data Formats
+[Practicum 8.1](https://chidiugonna.github.io/BrainSurfing/surfdata/prac81/): Surface-Based Data Formats
 
 ***
 
 <!-- [Lesson 9](surfanalysis/working.md): Working with Surface-based formats -->
 
-[Practicum 9.1](surfanalysis/prac91.md): Surface-Based Analysis 
+[Practicum 9.1](https://chidiugonna.github.io/BrainSurfing/surfanalysis/prac91/): Surface-Based Analysis 
