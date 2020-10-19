@@ -37,7 +37,7 @@ This practicum requires the following materials/folder setup for successful comp
 
 !!! Note
 
-    We will be running the scripts using  the docker container as shown below. For each script a command line will be provided which you will be able to copy and paste into your terminal window. Try to avoid extracting the zip folder into a root directory that has spaces in it to avoid problems with binding the current directory $PWD. If you do have to use a root directory with spaces in it then you can use single quotes in the bind as follows `-v '${PWD}':/mnt`. Double quotes might also work `-v "${PWD}":/mnt.`
+    We will be running the scripts using  the docker container as shown below. For each script a command line will be provided which you will be able to copy and paste into your terminal window. Try to avoid extracting the zip folder into a root directory that has spaces in it to avoid problems with binding the current directory $PWD. If you do have to use a root directory with spaces in it then you can use double quotes  around $PWD to solve this as follows `-v "${PWD}":/mnt.`
 
     docker run -v ${PWD}:/mnt --rm -it --entrypoint **bash** tigrlab/fmriprep_ciftify:v1.3.2-2.3.3 /mnt/**SCRIPTNAME**
 
