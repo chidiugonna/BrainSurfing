@@ -55,17 +55,22 @@ echo "Starting Projection of volume data to Right midthickness layer for $SUB."
 wb_command -volume-to-surface-mapping ${FUNC_VOL} ${MY_R_MID} ${R_FUNC} -ribbon-constrained ${R_PIAL} ${R_WHITE}
 echo "Completed Projection of volume data to Right midthickness layer for $SUB."
 
+
 SUBCORTROI=${DATA}/MNINonLinear/ROIs/ROIs.2.nii.gz
 SUBCORTLABEL=${CONFIG}/Atlas_ROIs.2.nii.gz
-echo "Started sampling of volume data tonto sub-cortical voxels of $SUB."
+if [ ! -f ${OUTPUT}/rest_AtlasSubcortical_s0.nii.gz ]
+then
+echo "Started sampling of volume data onto sub-cortical voxels of $SUB."
 wb_command -cifti-create-dense-timeseries ${OUTPUT}/temp_subject.dtseries.nii -volume ${FUNC_VOL} ${SUBCORTROI}
 # Dilate out zeros
 wb_command -cifti-dilate ${OUTPUT}/temp_subject.dtseries.nii COLUMN 0 10 ${OUTPUT}/temp_subject_dilate.dtseries.nii
 wb_command -cifti-create-label ${OUTPUT}/temp_template.dlabel.nii -volume ${SUBCORTLABEL} ${SUBCORTLABEL}
 wb_command -cifti-resample ${OUTPUT}/temp_subject_dilate.dtseries.nii COLUMN ${OUTPUT}/temp_template.dlabel.nii COLUMN ADAP_BARY_AREA CUBIC ${OUTPUT}/temp_atlas.dtseries.nii -volume-predilate 10
 wb_command -cifti-separate ${OUTPUT}/temp_atlas.dtseries.nii COLUMN -volume-all ${OUTPUT}/rest_AtlasSubcortical_s0.nii.gz
-echo "Completed sampling of volume data tonto sub-cortical voxels of $SUB."
-
+echo "Completed sampling of volume data onto sub-cortical voxels of $SUB."
+else
+	echo "${OUTPUT}/rest_AtlasSubcortical_s0.nii.gz already created. Skipping resample stage."
+fi
 TR=2
 L_MASK=${CONFIG}/L.atlasroi.32k_fs_LR.shape.gii
 R_MASK=${CONFIG}/R.atlasroi.32k_fs_LR.shape.gii
@@ -75,6 +80,6 @@ wb_command -cifti-create-dense-timeseries ${OUTPUT}/${PREFIX}${SUB}_rest.dtserie
 
 echo "Created CIFTI."
 # clean up
-rm ${OUTPUT}/temp*
+rm -f ${OUTPUT}/temp*
 
 chmod -R 777 ${OUTPUT}

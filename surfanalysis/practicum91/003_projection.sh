@@ -24,7 +24,7 @@
 CWD=/mnt
 #######CWD=$PWD
 
-SUB=sub-02
+SUB=sub-01
 DATA=${CWD}/DATA/${SUB}
 CONFIG=${CWD}/DATA/config
 OUTPUT=${CWD}/output/${SUB}
