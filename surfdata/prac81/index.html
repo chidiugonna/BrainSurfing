@@ -99,6 +99,8 @@
     </li>
         </ul>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#references">References</a>
+    </li>
     </ul>
                     </li>
                 </ul>
@@ -158,7 +160,7 @@
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Some of the tasks you will accomplish with this practicum will not ordinarily be part of your typical neuroimaging analysis workflow. For example you will rarely if ever need to change the topology of a surface mesh. However the intention of these exercises is to cement your understanding of these formats by giving you hands-on experience with manipulating them albeit in somewhat artificial scenarios.</p>
+<p>Some of the tasks you will accomplish with this practicum will not ordinarily be part of your typical neuroimaging analysis workflow. For example you will rarely if ever need to change the shape of a surface mesh. However the intention of these exercises is to cement your understanding of these formats by giving you hands-on experience with manipulating them albeit in somewhat artificial scenarios.</p>
 </div>
 <h2 id="downloadsinstallation">Downloads/Installation</h2>
 <p>This practicum requires the following materials/folder setup for successful complete:</p>
@@ -188,7 +190,7 @@
 <p>The Matlab libraries used in this practicum are described below:</p>
 <ul>
 <li>
-<p>The HCP <a href="https://github.com/Washington-University/cifti-matlab">cifti-matlab</a> library was in alpha-testing phase at the time of creating this practicum and so is liable to change in the future though hopefully not significantly. The version provided  had its last commit <code>1e0ca9fbb0f9a8105d144ec6bc0de55b84d1b528</code> on <code>Wed Sep 2 15:42:55 2020 -0500</code>. Please refer to the <a href="https://github.com/Washington-University/cifti-matlab">cifti-matlab</a> repository for announcements on when the alpha-testing is complete. In the meantime if you use this code for your own research then please appreciate that you do this at your own risk and there is a chance of errors.</p>
+<p>The HCP <a href="https://github.com/Washington-University/cifti-matlab">cifti-matlab</a> library was in alpha-testing phase at the time of creating this practicum and so is liable to change in the future though hopefully not significantly. The version provided  had its last commit <code>1e0ca9fbb0f9a8105d144ec6bc0de55b84d1b528</code> on <code>Wed Sep 2 15:42:55 2020 -0500</code>. Please refer to the <a href="https://github.com/Washington-University/cifti-matlab">cifti-matlab</a> repository for announcements on when the alpha-testing is complete. In the meantime if you use this code for your own research then please appreciate that you do this at your own risk and there is a chance of errors. [ Update on 11/2/2020, the cifti-matlab library was released as a beta version 2.0.0 for public testing on 9/30/2020. Comments from Tim Coalson summarizing the benefits of this version are available <a href="../cifti-tools/">here</a> ]</p>
 </li>
 <li>
 <p>The <a href="https://www.artefact.tk/software/matlab/gifti/">gifti</a>  library was downloaded as a zip file <code>gifti-master.zip</code>, extracted and renamed to <code>gifti-release</code></p>
@@ -216,6 +218,11 @@
 <li>Now click <code>Open</code>, you should see the left and right pial surfaces displayed with lateral and medial views</li>
 </ul>
 <p><img alt="select surfaces" src="../../img/task1_selectsurfs.png" /></p>
+<div class="admonition information">
+<p class="admonition-title">Information</p>
+<p>In several exercises we make use of data on the subject's <strong>native</strong> mesh as in the example above with the <code>100307.L.pial.native.surf.gii</code> and <code>100307.R.pial.native.surf.gii</code> surfaces. It's important to mention that most of the HCP data is however not on the native mesh but on a <strong>standard fs_LR</strong> mesh on which the left and right hemispheres of all subjects have been aligned using the MSM-All surface-based registration approach <a href="https://www.nature.com/articles/nature18933">Glasser et al, 2016</a>. </p>
+<p>There are two important standard spaces used in the HCP, namely, <strong>164k_fs_LR</strong> which is a high resolution space of 163,842 vertices per hemisphere (at approx 1mm resolution) and the <strong>32k_fs_LR</strong> space which is a lower resolution space of 32492 vertices per hemishere (at approx 2mm resolution). We will use an example of the latter in task 5. For more details about these standard meshes consult <a href="https://www.sciencedirect.com/science/article/abs/pii/S1053811913005053">Glasser et al, 2013</a> and the <a href="https://wiki.humanconnectome.org/display/PublicData/How+To+Handle+Downloaded+HCP+Data">HCP Wiki Page</a></p>
+</div>
 <ul>
 <li>
 <p>At the top of the application change from <strong>(1) Montage</strong> to  <strong>(2) All</strong> by clicking on the tab. You should see the left and right pial surfaces aligned on the screen. Use your mouse left button to rotate the brain around and your scroll wheel to zoom in and out</p>
@@ -247,13 +254,13 @@
 <p>Once you have selected a vertex we can now try and identify its neighbors.</p>
 </li>
 <li>
-<p>For the first pass through this practicum you should avoid choosing a vertex on the medial layer as this will cause difficulties in task 4.  To be super safe then just replicate the vertex we have chosen or choose a vertex that is easilly accessible on the lateral surface.</p>
+<p>For the first pass through this practicum you should avoid choosing a vertex on the medial wall as this will cause difficulties in task 4.  To be super safe then just replicate the vertex we have chosen or choose a vertex that is easilly accessible on the lateral surface.</p>
 </li>
 <li>
-<p>The medial layer contains vertices that are not actually on the cortical surface (actually these medial-layer vertices cut through subcortical grey matter structures and the Corpus callosum) but are required to maintain the spherical topology of the surface.  </p>
+<p>The <strong>medial wall</strong> contains vertices that are not actually on the cortical surface (actually these medial-wall vertices cut through subcortical grey matter structures and the Corpus callosum) but are required to maintain the spherical topology of the surface.  </p>
 </li>
 </ul>
-<p><img alt="medial layer" src="../../img/task1_mediallayer.png" /></p>
+<p><img alt="medial wall" src="../../img/task1_mediallayer.png" /></p>
 <ul>
 <li>
 <p>Select all the neighbouring vertices (all vertices connected by an edge to your chosen vertex). These should show up in the information screen. You can select and copy the text from this screen and place it in a text file. We will need this information for the next Task. </p>
@@ -266,7 +273,7 @@
 <h2 id="task-2-use-matlab-to-manipulate-gifti-surfaces">Task 2: Use Matlab to manipulate GIFTI Surfaces</h2>
 <ul>
 <li>
-<p>In this task we will be loading in the GIFTI surface <code>100307.L.pial.native.surf.gii</code> which we visualized above and identifying the vertex and vertex neighbours we chose. We will then change the local topology of the surface by nudging these vertices by a random 3D translation and then save a new copy of the surface which we will visualize again using <strong>wb_view</strong>.</p>
+<p>In this task we will be loading in the GIFTI surface <code>100307.L.pial.native.surf.gii</code> which we visualized above and identifying the vertex and vertex neighbours we chose. We will then change the local shape of the surface by nudging these vertices by a random 3D translation and then save a new copy of the surface which we will visualize again using <strong>wb_view</strong>.</p>
 </li>
 <li>
 <p>Open Matlab and navigate to your the  <code>practicum81</code>  folder containing <code>task_002_giftisurf.m</code>. Double click this file to open it in Matlab.</p>
@@ -414,7 +421,7 @@ Cannot read XML document
 </ul>
 <p><img alt="locate vertex again" src="../../img/task2_locatevertex.png" /></p>
 <ul>
-<li>Now Change the Surface properties to <code>Link(Edges)</code> (if not already changed from previous steps) and zoom in closer to see how the pertubations you made to the neighboring vertices have changed the topology. You will probably need to change the symbol diameter to something smaller. You should notice that the topology of your vertices has changed. </li>
+<li>Now Change the Surface properties to <code>Link(Edges)</code> (if not already changed from previous steps) and zoom in closer to see how the pertubations you made to the neighboring vertices have changed the shape of the mesh. You will probably need to change the symbol diameter to something smaller. You should notice that the spatial location of the vertices has changed.</li>
 </ul>
 <p><img alt="surface is amended" src="../../img/task2_amendedsurface.png" /></p>
 <ul>
@@ -422,7 +429,7 @@ Cannot read XML document
 </ul>
 <p><img alt="compare" src="../../img/task2_leftpialoriginalview.png" /></p>
 <ul>
-<li>You can also click on a Montage view to see both surfaces side by side (You will need to deselect either the medial or lateral checkbox to see the vertex and neighbours properly side by side). You will also need to select both surfaces as different layers in the montage selection. You should confirm that you have successfully change the topology of your surface.</li>
+<li>You can also click on a Montage view to see both surfaces side by side (You will need to deselect either the medial or lateral checkbox to see the vertex and neighbours properly side by side). You will also need to select both surfaces as different layers in the montage selection. You should confirm that you have successfully changed the shape of your surface.</li>
 </ul>
 <p><img alt="compare in montage" src="../../img/task2_montagecompare.png" /></p>
 <ul>
@@ -572,6 +579,7 @@ Overlay has 130879 values
 <li>
 <p>In <strong>Section A</strong> we will briefly explore the overlay <code>100307.thickness.native.dscalar.nii</code> as a NIFTI-2 file. We will use a private function  <code>read_nifti2_hdr.m</code> which is packaged as part of the <code>FieldTrip</code> Matlab library. The diagram below shows how a NIFTI-2 file is used to package up this CIFTI.</p>
 </li>
+<li>The extra space used in the NIFTI-2 file to store the cifti-XML is called a <strong>cifti extension</strong> or <strong>extension</strong>. </li>
 </ul>
 <p><img alt="cifti in nifti2" src="../../img/Cifti_format.png" /></p>
 <ul>
@@ -590,20 +598,6 @@ Overlay has 130879 values
 <li>
 <p>where the value of <code>nii2.dim[7] = 248488</code> is the data size in floats which is equal to <code>4*248488=993952</code> in bytes. The XML is thus embedded in the extent section between the header and the data. It is this section that the cifti-matlab library reads to determine exactly how the surface and volume models are set up.</p>
 </li>
-</ul>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>MacOS users may see an error as shown below when running <strong>section B</strong> below. </p>
-<div class="highlight"><pre><span></span><code>Invalid MEX-file
-&#39;/Practicum81/matlab-library/cifti-matlab/ft_cifti/@xmltree/private/xml_findstr.mexmaci64&#39;:
-dlopen(/Practicum81/matlab-library/cifti-matlab/ft_cifti/@xmltree/private/xml_findstr.mexmaci64,
-6): Library not loaded: @loader_path/libmex.dylib
-</code></pre></div>
-
-<p>This is due to an incompatibility with the <strong>xml_findstr.mexmaci64</strong> file which is located at <strong>practicum8.1/matlab-library/cifti-matlab/ft_cifti/@xmltree/private</strong></p>
-<p>Please replace this file by simplying copying over one of the versions of this file from either of the folders <strong>macmexReplace1_ft</strong> (<em>first choice</em>) or <strong>macmexReplace2_orig</strong> (<em>second choice</em>) which are in the same location. Ignore the folder <em>macmexReplace_dup</em> as it just  contains a copy of the existing xml_findstr.mexmaci64.</p>
-</div>
-<ul>
 <li>
 <p>Run <strong>Section B</strong> to explore the CIFTI XML file in a Matlab structure and in a browser.</p>
 </li>
@@ -684,10 +678,10 @@ ans =
 <p>There however appears to be an inconsistency with the total number of vertices allocated to the overlay. In the last task we had 130879 vertices in the left hemisphere but here we have 125197 vertices assigned (roughly about 5600 vertices fewer). What's going on? </p>
 </li>
 <li>
-<p>Essentially the HCP CIFTI files do not store data for the medial layer of each cortex. We saw the medial layer in the first task. We will identify these medial vertices and visualize a few of them on the left cortex.</p>
+<p>Essentially the HCP CIFTI files do not store data for the medial wall of each cortex. We saw the medial wall in the first task. We will identify these medial vertices and visualize a few of them on the left cortex.</p>
 </li>
 <li>
-<p>Run <strong>section C</strong> to print out all the vertices that are missing from the left cortex. These are the medial vertices. There should be <code>5682</code> vertices in the medial layer displayed to screen. Select one or a few of them and using the <code>identify</code> tool in <code>wb_view</code> try to see where they are. You will need to use the surface view and visualize the left cortex only so you can see these vertices. Some of these are easier to spot than others.</p>
+<p>Run <strong>section C</strong> to print out all the vertices that are missing from the left cortex. These are the medial vertices. There should be <code>5682</code> vertices in the medial wall displayed to screen. Select one or a few of them and using the <code>identify</code> tool in <code>wb_view</code> try to see where they are. You will need to use the surface view and visualize the left cortex only so you can see these vertices. Some of these are easier to spot than others.</p>
 </li>
 </ul>
 <p><img alt="medial vertices" src="../../img/task4_mediallayer.png" /></p>
@@ -695,6 +689,9 @@ ans =
 <li>In <strong>section D</strong> and <strong>E</strong> we do what we did in task 3 and will now go ahead and change the value of a vertex and its neighbors to a constant value of 2mm cortical thickness. The code uses a vertex value of 119115 but of course you should use any vertex you like except for the medial vertices which the CIFTI file does not track. Open the <code>amended.100307.thickness.native.dscalar.nii</code> that is created in your current directory in wb_view and navigate to the vertex to confirm that changes have been made.</li>
 </ul>
 <p><img alt="change thickness cifti" src="../../img/task4_changethickness.png" /></p>
+<ul>
+<li>An additional section at the end of the file provides code to replace sections E and F, which shows how the <strong>cifti-matlab</strong> helper function <a href="https://github.com/Washington-University/cifti-matlab/blob/master/cifti_diminfo_dense_get_surface_info.m"><code>cifti_diminfo_dense_get_surface_info</code></a> allows us to more efficiently identify the vertices on the <code>LEFT_CORTEX</code> and map them to their corresponding data values in the <code>ciiall.cdata</code> matrix. This is the preferred approach to accessing data associated with surface structures in the cifti file. The equivalent function for accessing sub-cortical structures is <a href="https://github.com/Washington-University/cifti-matlab/blob/master/cifti_diminfo_dense_get_volume_structure_info.m">cifti_diminfo_dense_get_volume_structure_info</a>. Please refer to the cifti-matlab library for additional convenience functions.</li>
+</ul>
 <h2 id="task-5-use-matlab-to-manipulate-and-visualize-cifti-files-with-volumes-and-surfaces-combined">Task 5: Use Matlab to manipulate and visualize CIFTI files with volumes and surfaces combined</h2>
 <ul>
 <li>
@@ -774,11 +771,18 @@ Model 6 is a volume of AMYGDALA_RIGHT with  332 voxels; start from 60003 and end
 <p>The code has been set up to open the CIFTI XML automatically in firefox if it is installed in your path but this may not work on your system without some tweaking. You can also simply view the XML directly in a browser or in VScode by opening the file <code>debug.xml</code> that is created in your current folder. </p>
 </li>
 <li>
-<p>In section <strong>B</strong>, we will now take an arbitrary vertex 17617 in the <strong>Right</strong> hemisphere and plot the fmri data in that vertex along with its closest neighbors. Observe that we have to check for existence of the neighbors that we find in the available list of vertices because one of the neighbors might actually be in the medial layer. </p>
+<p>In section <strong>B</strong>, we will now take an arbitrary vertex 17617 in the <strong>Right</strong> hemisphere and plot the fmri data in that vertex along with its closest neighbors. Observe that we have to check for existence of the neighbors that we find in the available list of vertices because one of the neighbors might actually be in the medial wall. </p>
+</li>
+<li>
+<p>This is achieved for you using the code <code>neighindex=ismember(visverts,allverts);</code>  which takes <code>allverts</code> which includes vertex 17617 as well as its close neighbours and compares it against all the visible vertices that are not on the medial wall.</p>
+</li>
+<li>
+<p>Notice also how we have to pinpoint the Right Hemisphere vertex data within <code>ciiall.cdata</code> data by using an offset because the <code>ciiall.cdata</code> is populated first with values from the left cortex but the Right Hemisphere starts indexing its vertices from 0. This is achieved already for you using the code <code>findRHneighbors=findneighbors + ciiall.diminfo{1}.models{2}.start - 1</code> to identify the vertices and then <code>plot(ciiall.cdata(findRHneighbors,:)')</code> to display their fMRI series.</p>
+</li>
+<li>
+<p>An updated approach to the one mentioned above has now been provided as an <strong>optional section B</strong>. This section shows how the <strong>cifti-matlab</strong> helper function <a href="https://github.com/Washington-University/cifti-matlab/blob/master/cifti_diminfo_dense_get_surface_info.m"><code>cifti_diminfo_dense_get_surface_info</code></a> allows us to more efficiently identify the vertices on the <code>RIGHT_CORTEX</code> and map them to their corresponding data values in the <code>ciiall.cdata</code> matrix. This is the preferred approach to accessing data associated with surface structures in the cifti file. Please refer to the cifti-matlab library for additional convenience functions. </p>
 </li>
 </ul>
-<p>This is achieved for you using the code <code>neighindex=ismember(visverts,allverts);</code>  which takes <code>allverts</code> which includes vertex 17617 as well as its close neighbours and compares it against all the visible vertices that are not on the medial layer.</p>
-<p>Notice also how we have to pinpoint the Right Hemisphere vertex data within <code>ciiall.cdata</code> data by using an offset because the <code>ciiall.cdata</code> is populated first with values from the left cortex but the Right Hemisphere starts indexing its vertices from 0. This is achieved already for you using the code <code>findRHneighbors=findneighbors + ciiall.diminfo{1}.models{2}.start - 1</code> to identify the vertices and then <code>plot(ciiall.cdata(findRHneighbors,:)')</code> to display their fMRI series.</p>
 <p><img alt="fmri plot" src="../../img/task4_timeseries.png" /></p>
 <ul>
 <li>
@@ -813,6 +817,9 @@ ans =
 </li>
 <li>
 <p>Again as with the vertices we check the <code>voxlist</code> for existence as some of these voxels might be in other structures and thus not accessible within the Left Hippocampus. We do find that there are 26 neighbors to our voxel. </p>
+</li>
+<li>
+<p>Updates have been made to the code to use the function <code>cifti_diminfo_dense_get_volume_structure_info</code> in an <strong>optional section D</strong> to more efficiently identify and change the data associated with the LEFT_HIPPOCAMPUS. This is the preferred approach to accessing data associated with volume structures in the cifti file.</p>
 </li>
 <li>
 <p>In Section <strong>E</strong> we simulate an fMRI signal and place identical copies of it in vertex 17617 and its 6 neighbors, vertex 8470 and its 6 neighbours and voxel 56,56,25 and its 26 neighbors. And finally in section <strong>F</strong> we save a copy of this  in a new CIFTI file called <code>amended.rfMRI_REST1_LR_Atlas_hp2000_clean.dtseries.nii</code></p>
@@ -884,16 +891,16 @@ ans =
 <h3 id="wb_view-sluggishbehaving-erratically-in-windows">wb_view sluggish/behaving erratically  in Windows</h3>
 <p>It is possible that your system has an outstanding windows update. Run Windows Update on your computer. Shutdown and restart and then reinstall wb_view to fix this.</p>
 <h3 id="invalid-mex-file-in-mac">Invalid MEX-file in Mac</h3>
-<p>When running one or two of the exercises on the Mac you may get an error related to <code>Invalid MEX-file</code></p>
-<pre><code>```
-Invalid MEX-file
-'/Practicum81/matlab-library/cifti-matlab/ft_cifti/@xmltree/private/xml_findstr.mexmaci64':
-dlopen(/Practicum81/matlab-library/cifti-matlab/ft_cifti/@xmltree/private/xml_findstr.mexmaci64,
-6): Library not loaded: @loader_path/libmex.dylib
-```
-</code></pre>
-<p>This is due to an incompatibility with the <strong>xml_findstr.mexmaci64</strong> file which is located at <strong>practicum8.1/matlab-library/cifti-matlab/ft_cifti/@xmltree/private</strong></p>
-<p>Please replace this file by simplying copying over one of the versions of this file from either of the folders <strong>macmexReplace1_ft</strong> (<em>first choice</em>) or <strong>macmexReplace2_orig</strong> (<em>second choice</em>) which are in the same location. Ignore the folder <em>macmexReplace_dup</em> as it just  contains a copy of the existing xml_findstr.mexmaci64.</p>
+<p>When running one or two of the exercises on the Mac you may get an error related to <code>Invalid MEX-file</code>.</p>
+<p>This is due to an incompatibility between the version of Matlab that you are running, the mac OS version and the compiled version of the mex file that is flagged as in error. It might be possible to solve this in one of three ways:</p>
+<ul>
+<li>Recompile the mex file in matlab to create a version that is compatible with you mac OS and matlab version</li>
+<li>Find a compatible mex file online that can act as a drop-in replacement for the problematic version. One good source for replacement mex files is the <a href="https://www.fil.ion.ucl.ac.uk/spm/software/download/">SPM library</a>.</li>
+<li>If you are lucky then the mex file in error is one that only provides efficiency gains and is not critical to the functionality of the module. You might be able to simply delete the mex file to carry on with the practicum.</li>
+</ul>
+<h2 id="references">References</h2>
+<p>Glasser, M. F., Sotiropoulos, S. N., Wilson, J. A., Coalson, T. S., Fischl, B., Andersson, J. L., ... &amp; Van Essen, D. C. (2013). <a href="https://www.sciencedirect.com/science/article/abs/pii/S1053811913005053?via%3Dihub">The minimal preprocessing pipelines for the Human Connectome Project.</a> Neuroimage, 80, 105-124.</p>
+<p>Glasser, M. F., Coalson, T. S., Robinson, E. C., Hacker, C. D., Harwell, J., Yacoub, E., ... &amp; Smith, S. M. (2016). <a href="https://www.nature.com/articles/nature18933">A multi-modal parcellation of human cerebral cortex.</a> Nature, 536(7615), 171-178.</p>
               
             </div>
           </div>

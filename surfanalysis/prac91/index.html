@@ -140,12 +140,13 @@
                 <h1 id="practicum-91-surface-based-analysis">Practicum 9.1 -  Surface-Based Analysis</h1>
 <h2 id="synopsis">Synopsis</h2>
 <p>Surface-based methods provide several advantages over volume-based methods for analysing data on the cerebral cortex [Dickie et al. 2019, Coalson et al. 2018, Glasser et al. 2013]. Fundamentally, they seem to provide a more neurobiologically valid representation of the way that function is mapped along the surface of the cortex as a 2D metric [Glasser et al. 2013] . This in turn affords other downstream benefits that make surface-based approaches attractive for studying the cortex.</p>
-<p>These benefits include the facilitation of more computationally tractable algorithms for aligning cortical convolutions across many subjects thus leading to better alignment of functional areas [Coalsson et al. 2018] and the encouragement of constrained spatial smoothing methods that reduce the corruption of functional signal from non-related parts of the brain [Dickie et al. 2019]. These two benefits improve the statistical power of surface based studies. Surface-based methods also allow for much better visualization of cortical patterns of structure and function by the use of inflated and flat surfaces that expose sulci that are usually hidden in the volume. </p>
-<p>In addition, surface-based models of the cortex by nature lead to more compact and efficient representation. For example, to achieve 2mm resolution of the cortex, the Human Connectome Project uses a CIFTI file with 91282 vertices and voxels to represent the whole brain. By contrast, the MNI 2mm mask uses 228,483 voxels [Glasser et al. 2013] to cover the brain in volumetric analysis. In addition to reduced file sizes the use of surface-based data formats easilly allows multi-modal data to be quickly aligned and matched within and across subjects greatly improving the speed and ease of analysis [Dickie et al. 2019].</p>
+<p>These benefits include the facilitation of more computationally tractable algorithms for aligning cortical areas across many subjects using brain measures that lead to better alignment of functional areas [Coalson et al. 2018]. The HCP for example uses brain features like myelination and resting state fMRI to improve functional correspondence between subjects which would not be guaranteed by the restricted geometric-based measures used by Volume-Based methods.  Another benefit of surface-based methods is the encouragement of constrained spatial smoothing methods that reduce the corruption of functional signal from non-related parts of the brain [Dickie et al. 2019].</p>
+<p>These two benefits ensure that studies can be conducted accurately at high resolution across a large number of subjects and help improve the statistical power of surface based studies. Surface-based methods also allow for much better overall intuitive visualization of cortical patterns of structure and function when compared to volume-based visualization on a slice-by-slice basis. </p>
+<p>In addition, surface-based models of the cortex by nature lead to more compact and efficient representation. For example, to achieve 2mm resolution of the cortex, the Human Connectome Project uses a CIFTI file with 91282 vertices and voxels to represent gray matter in the brain. By contrast, an MNI 2mm mask requires approximately 130,000 voxels to cover the gray matter region in volumetric analysis. In addition to reduced file sizes the use of surface-based data formats easilly allows multi-modal data to be quickly aligned and matched within and across subjects greatly improving the speed and ease of analysis [Dickie et al. 2019].</p>
 <h2 id="objectives">Objectives</h2>
 <p>This practicum will introduce you to some of the steps required for preparing MRI neuroimaging data for group surface-based statistical analysis. These steps have been copied from the <a href="https://github.com/Washington-University/HCPpipelines">Human Connectome Project's Pipelines</a> [Glasser et al. 2013] which have been recreated by <a href="https://github.com/edickie/ciftify">Dickie et al. 2019</a> for non-HCP (aka legacy) data. The scripts for this practicum are described below:</p>
 <ul>
-<li><code>001_inflate.sh</code> : Use <code>wb_command</code> to create midthickness surface layer and inflated layers.</li>
+<li><code>001_inflate.sh</code> : Use <code>wb_command</code> to create midthickness surface and inflated surfaces.</li>
 <li><code>002_register.sh</code>: Use <code>msm</code> and <code>wb_command</code> to register 2 subject meshes to a standard surface template</li>
 <li><code>003_projection.sh</code>: Use <code>wb_command</code> to map an fmri volume onto a GIFTI surface mesh</li>
 <li><code>004_ciftigen.sh</code>: Use <code>wb_command</code> to map an fmri volume into a CIFTI file</li>
@@ -153,9 +154,9 @@
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>Please appreciate that the processing tasks you will undertake in this practicum are provided for demonstration purposes only and to shed some light on how these surface processing steps are roughly accomplished. For your research you will want to use one of the robust, established pipelines that not only automate the steps above but utilize the most up-to-date and accurate methods for implementing these steps. The one step that is usually left to the user to do by these pipelines is <strong>spatial smoothing</strong>. However conservative use of spatial smoothing, even when constrained to the surface,  is advised [Coalson et al. 2018].</p>
+<p>Please appreciate that the processing tasks you will undertake in this practicum are provided for demonstration purposes only and to shed some light on how these surface processing steps are roughly accomplished. For your research you will want to use one of the robust, established pipelines that not only automate the steps above but utilize the most up-to-date and accurate methods for implementing these steps. The one step that is usually left to the user to do by these pipelines is <strong>spatial smoothing</strong>. However it is advised to minimize the use of spatial smoohing , even surface-based smoothing, in order to preserve as much spatial detail as possible in the results [Coalson et al. 2018].</p>
 <p><a href="https://fmriprep.org/en/stable/">FMRIPrep</a> currently performs robust pre-processing on fmri data and can output this out as a surface-based <a href="https://fmriprep.org/en/stable/outputs.html?highlight=cifti#functional-derivatives">CIFTI .dtseries.nii</a> file for surface based analysis. </p>
-<p>If you have HCP-style data then you may be able to adapt the <a href="https://github.com/Washington-University/HCPpipelines">HCP Pipelines</a> to work with your data. Alternatively if you have non-HCP data then the <a href="https://github.com/edickie/ciftify">Ciftify pipeline</a> will perform an HCP-style analysis on your data.</p>
+<p>If you have HCP-style data then you may be able to adapt the <a href="https://github.com/Washington-University/HCPpipelines">HCP Pipelines</a> to work with your acquisitions. Alternatively if you have data that does not meet the HCP's recommended acquisition guidelines then the <a href="https://github.com/edickie/ciftify">Ciftify pipeline</a> can be used to convert your data to cifti format and map it to a similar file structure as the HCP's processing pipeline outputs.</p>
 <p>And of course <a href="https://surfer.nmr.mgh.harvard.edu/fswiki">Freesurfer</a> has many different tools for surface-based analysis. Many of the steps mentioned above can be accomplished with equivalent freesurfer commands. Most notable of course is that all of the above pipelines depend on freesurfer for the creation of the initial surface mesh models.</p>
 <p>In addition to these there are several other tools and methods that can provide a good starting point for developing robust surface-based processing pipelines.</p>
 </div>
@@ -193,7 +194,7 @@
 <p>The scripts for this practicum have been written based on an inspection of the <a href="https://github.com/Washington-University/HCPpipelines">HCP pipelines</a> and the <a href="https://github.com/edickie/ciftify">Ciftify pipelines</a>. Only the essential aspects of the processing steps used in these pipelines have been provided for demonstration purposes and so these scripts are suboptimal for actual research purposes and additionally have not been tested thoroughly.</p>
 <h3 id="data">Data</h3>
 <p>We will be using a subset of the <a href="https://openneuro.org/datasets/ds000003/versions/00001">Rhyme Judgment</a> data (subjects <code>sub-01</code> and <code>sub-02</code>) acquired by [Xue and Poldrack 2007]. This data has also been used in an FMRIPrep exemplar pipeline for task-based analysis [Esteban et al. 2020]. The data has been processed using fmriprep, freesurfer and ciftify as described further below.</p>
-<p>We will also use flat and spherical surfaces from subject <code>100307</code> which is included as part of the Human Connectome Project's Young Adult (YA) <a href="https://db.humanconnectome.org/data/projects/HCP_1200">1200 Subject Release</a>. The HCP has terms of reference for using their data. To use HCP data please sign on to the <a href="https://db.humanconnectome.org">HCP website</a> and register for free.</p>
+<p>We will also use flat and spherical surfaces from subject <code>100307</code> which is included as part of the Human Connectome Project's Young Adult (YA) <a href="https://db.humanconnectome.org/data/projects/HCP_1200">1200 Subject Release</a>. The HCP places data use terms on their data. To use HCP data please sign on to the <a href="https://db.humanconnectome.org">HCP website</a> and register for free.</p>
 <p>The folder <code>MMP_HCP</code> contains a subset of the files released for the <a href="https://balsa.wustl.edu/study/show/RVVG">Multi-modal parcellation of Human Cerebral Cortex</a>. This atlas is a comprehensive delineation of about 180 cerebral cortex areas per hemisphere obtained using the HCP's advanced analysis approach [Glasser et al. 2013, Glasser et al. 2016].</p>
 <p>Miscellaneous HCP configuration files (atlas and registration templates, MSM Sulc registration config file etc.) are provided in <code>config</code>. These have been copied from the <a href="https://github.com/Washington-University/HCPpipelines">HCP Pipelines</a></p>
 <h3 id="initial-processing">Initial processing</h3>
@@ -208,15 +209,15 @@
 
 <ul>
 <li>
-<p>The script creates the <strong>midthickness</strong> layer <code>amended.sub-01.L.midthickness.32k_fs_LR.surf.gii</code> in the directory <code>practicum91/output/sub-01</code>. This layer lies between the <strong>pial</strong> and the <strong>white</strong> layer and is created using  <code>wb_command -surface-average</code>. This layer is useful for projecting functional data from the volume onto the cortex.</p>
+<p>The script creates the <strong>midthickness</strong> surface <code>amended.sub-01.L.midthickness.32k_fs_LR.surf.gii</code> in the directory <code>practicum91/output/sub-01</code>. This surface lies between the <strong>pial</strong> and the <strong>white</strong> surface and is created using  <code>wb_command -surface-average</code>. This surface is useful for projecting functional data from the volume onto the cortex.</p>
 </li>
 <li>
-<p>The script also creates an <strong>inflated</strong> and a  <strong>very_inflated</strong> layer in the same directory using <code>wb_command -surface-generate-inflated</code>. These layers allow functional areas to be better visualized in the cortex.</p>
+<p>The script also creates an <strong>inflated</strong> and a  <strong>very_inflated</strong> surface in the same directory using <code>wb_command -surface-generate-inflated</code>. These surfaces allow functional areas to be better visualized in the cortex.</p>
 </li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The script generates the inflated surfaces from the midthickness layer. This is not strictly how it's done in Freesurfer which instead uses the white surface to create the inflated surfaces.</p>
+<p>The script generates the inflated surfaces from the midthickness surface. This is similar to how it's done in the HCP pipelines but not how it's done in Freesurfer which instead uses the white surface to create the inflated surfaces.</p>
 </div>
 <ul>
 <li>
@@ -225,27 +226,27 @@
 <li>
 <p>Open <strong>wb_view</strong> and navigate to <code>./DATA/sub-01/MNINonLinear/</code> and load in <code>T1w.nii.gz</code>. Now navigate up one folder to <code>fsaverage_LR32k</code> and load in the two surfaces <code>sub-01.L.pial.32k_fs_LR.surf.gii</code> and <code>sub-01.L.white.32k_fs_LR.surf.gii</code></p>
 </li>
-<li>Now load in the midthickness layer you created <code>amended.sub-01.L.midthickness.32k_fs_LR.surf.gii</code> from <code>./output/sub-01</code></li>
+<li>Now load in the midthickness surface you created <code>amended.sub-01.L.midthickness.32k_fs_LR.surf.gii</code> from <code>./output/sub-01</code></li>
 <li>Click on the <strong>volume view</strong> and select the <strong>Vol/Surf Tab</strong>. Assign each drop down in the <strong>File</strong> column to one of the three different overlays and assign each a different color.</li>
-<li>Notice that your midthickness layer is indeed between the pial and the white layer. You may have to zoom in to see this more clearly.</li>
+<li>Notice that your midthickness surface is indeed between the pial and the white surface. You may have to zoom in to see this more clearly.</li>
 </ul>
 <p><img alt="midthickness" src="../../img/001_inflate_amended.png" /></p>
 <ul>
-<li>Now we will see how the inflated and very_inflated layers better help us visualize cortical areas. We will also look at the flat layer and a spherical layer that are provided by the HCP's pipelines.</li>
-<li>In <strong>wb_view</strong> now load in the inflated <code>amended.sub-01.L.inflated.32k_fs_LR.surf.gii</code> and very_inflated layers <code>amended.sub-01.L.very_inflated.32k_fs_LR.surf.gii</code> from from <code>./output/sub-01</code>.</li>
+<li>Now we will see how the inflated and very_inflated surfaces better help us visualize cortical areas. We will also look at the flat surface and a spherical surface that are provided by the HCP's pipelines.</li>
+<li>In <strong>wb_view</strong> now load in the inflated <code>amended.sub-01.L.inflated.32k_fs_LR.surf.gii</code> and very_inflated surfaces <code>amended.sub-01.L.very_inflated.32k_fs_LR.surf.gii</code> from from <code>./output/sub-01</code>.</li>
 <li>Navigate to <code>./DATA/MMP_HCP</code> and load in all 4 files that you see there. This is the Human Connectome's <a href="https://balsa.wustl.edu/study/show/RVVG">Multi-modal Parcellation of Human Cerebral Cortex</a> [Glasser et al. 2016]. You might need to change <strong>Files of Type:</strong> to  <code>Any File (*)</code> to be able to see them all.</li>
 <li>These files are <code>Q1-Q6_RelatedValidation210.CorticalAreas_dil_Final_Final_Areas_Group_Colors.32k_fs_LR.dlabel.nii</code>, <code>Q1-Q6_RelatedValidation210.L.CorticalAreas_dil_Final_Final_Areas_Group.32k_fs_LR.border</code>, <code>Q1-Q6_RelatedValidation210.R.CorticalAreas_dil_Final_Final_Areas_Group.32k_fs_LR.border</code> and <code>MMP_areas_tangential_32k_bothHems_inflated.wb_annot</code></li>
 <li>Finally navigate to <code>./Data/100307</code>  and load in <code>100307.L.flat.32k_fs_LR.surf.gii</code> and <code>100307.L.sphere.32k_fs_LR.surf.gii</code></li>
 <li>Click on <strong>Surface View</strong></li>
-<li>Activate  the <code>Q1-Q6_RelatedValidation210.CorticalAreas_dil_Final_Final_Areas_Group_Colors.32k_fs_LR.dlabel.nii</code> layer by clicking it's checkbox <strong>On</strong> </li>
+<li>Activate  the <code>Q1-Q6_RelatedValidation210.CorticalAreas_dil_Final_Final_Areas_Group_Colors.32k_fs_LR.dlabel.nii</code> surface by clicking it's checkbox <strong>On</strong> </li>
 <li>In the <strong>Brain Structures and Surface</strong> panel, change the surfaces in turn using the drop down box to see how the Multi Modal Parcellations are rendered on the surface.</li>
-<li>Notice how the inflated layers allow you to see cortical areas normally buried in the sulci. Also notice how the flat layer allows you to see both the medial and lateral surfaces at the same time.</li>
+<li>Notice how the inflated surfaces allow you to see cortical areas normally buried in the sulci. Also notice how the flat surface allows you to see both the medial and lateral surfaces at the same time.</li>
 </ul>
 <p><img alt="midthickness" src="../../img/002_inflated_surfaces.png" /></p>
 <h2 id="task-2-use-multimodal-surface-matching-msm-to-register-a-native-mesh-to-the-164k-fs_lr-template">Task 2: Use MultiModal Surface Matching (MSM) to register a native mesh to the 164k fs_LR template</h2>
 <ul>
 <li>
-<p>MultiModal Surface Matching (MSM) [Robinson et al. 2014] is a spherical surface-based registration method that <a href="https://emmarobinson01.com/2020/04/05/advanced-features-of-msm-a-guide/">enhances the traditional approach</a> to surface-based registration by allowing the use of other generalizable brain features (e.g. function, connectivity etc) in addition to  cortical folding to improve brain alignment. In this task however we will not be taking advantage of this enhancement and will be using MSM as any other traditional surface-based registration technique that uses only geometric features to achieve registration..</p>
+<p>MultiModal Surface Matching (MSM) [Robinson et al. 2014] is a spherical surface-based registration method that <a href="https://emmarobinson01.com/2020/04/05/advanced-features-of-msm-a-guide/">enhances the traditional approach</a> to surface-based registration by allowing the use of multiple generalizable brain feature types (e.g. function, connectivity etc) to improve brain alignment. In this task however we will not be taking advantage of this enhancement and will be using MSM as any other traditional surface-based registration technique that uses only geometric features to achieve registration..</p>
 </li>
 <li>
 <p>The version of MSM that is contained within the docker container is not the latest version and so takes a considerable amount of time to perform the registration for this practicum. I have thus gone ahead and created the registered spheres ahead of time which are stored in <code>./DATA/sub-??/MSMSulc</code>.</p>
@@ -268,7 +269,7 @@
 <p>This script performs the following steps:</p>
 <ul>
 <li>The sulcal overlay is a CIFTI file and this has to be separated into two surface GIFTIs so that we have a measure of sulcal values for the left hemisphere and the right hemisphere</li>
-<li>The MSM algorithm then aligns the spherical surface for the subject (<strong>sub-01.L.sphere.rot.native.surf.gii</strong>) with the standard Left Hemisphere 164K_fsLR spherical template (<strong>fsaverage.L_LR.spherical_std.164k_fs_LR.surf.gii</strong>) by matching the sulcal overlay for the left hemisphere that was obtained above with the sulcal overlay template (<strong>L.refsulc.164k_fs_LR.shape.gii</strong>). A "warp field" (<strong>L.sphere.reg.surf.gii</strong>) that describes this alignment is calculated and can then be used to resample surfaces and overlays from the native space to the standard space. </li>
+<li>The MSM algorithm then aligns the spherical surface for the subject (<strong>sub-01.L.sphere.rot.native.surf.gii</strong>) with the standard Left Hemisphere 164K_fsLR spherical template (<strong>fsaverage.L_LR.spherical_std.164k_fs_LR.surf.gii</strong>) by matching the sulcal overlay for the left hemisphere that was obtained above with the sulcal overlay template (<strong>L.refsulc.164k_fs_LR.shape.gii</strong>). A "registered sphere" (<strong>L.sphere.reg.surf.gii</strong>) that describes this alignment is calculated and can then be used to resample surfaces and overlays from the native space to the standard space. </li>
 <li>Using <code>wb_command -surface-resample</code> we resample the midthickness surface from native space to the new standard space. This new midthickness surface is called <code>./output/sub-01/amended.sub-01.L.midthickness.164k_fs_LR.surf.gii</code></li>
 <li>Using <code>wb_command -metric-resample</code> we resample the left cortical thickness overlay onto the new left midthickness surface in 164k_fs_LR space.</li>
 </ul>
@@ -277,12 +278,12 @@
 <p>Change the script so that the other subject is now processed. Change <code>line 30</code> to point to the new subject (<code>SUB=sub-02</code>) and rerun the docker command.</p>
 </li>
 <li>
-<p>In wb_view, select <strong>File</strong> &gt; <strong>Close All Files</strong> and then open the two resampled surfaces for both subjects i.e. <code>./output/amended.sub-01/sub-01.L.midthickness.164k_fs_LR.surf.gii</code> and <code>./output/amended.sub-02/sub-02.L.midthickness.164k_fs_LR.surf.gii</code> - notice that because both surfaces are registered to the 164K template they have exactly the same number of vertices and that their vertices are in correspondence. Select <strong>Montage</strong> view and deselct the <strong>Medial</strong> checkbox. Ensure that in the <em>Montage Selection</em> both checkboxes are selected and that both surfaces are represented.  Click on either subjects surface mesh to select a vertex and notice that a corresponding vertex is identified on the surface of the other subject. These subject meshes are in vertex correspondence as they have been registered to the same template.</p>
+<p>In wb_view, select <strong>File</strong> &gt; <strong>Close All Files</strong> and then open the two resampled surfaces for both subjects i.e. <code>./output/amended.sub-01/sub-01.L.midthickness.164k_fs_LR.surf.gii</code> and <code>./output/amended.sub-02/sub-02.L.midthickness.164k_fs_LR.surf.gii</code> - notice that because both surfaces are registered to the 164K template they have exactly the same number of vertices and that their vertices are in correspondence. Select <strong>Montage</strong> view and deselect the <strong>Medial</strong> checkbox. Ensure that in the <em>Montage Selection</em> both checkboxes are selected and that both surfaces are represented.  Click on either subjects surface mesh to select a vertex and notice that a corresponding vertex is identified on the surface of the other subject. These subject meshes are in vertex correspondence as they have been registered to the same template.</p>
 </li>
 </ul>
 <p><img alt="midthickness" src="../../img/003_register_compare_landmarks.png" /></p>
 <ul>
-<li>One dramatic way to see how features generalize across subjects is to view the sulc overlay on the sphere. Again <strong>Close all Files</strong> in your current instance of <strong>wb_view</strong>. Now open another separate instance of <strong>wb_view</strong> so that you have two copies of the program running at the same time. In both instances open the standard sphere in <code>./DATA/config/fsaverage.L_LR.spherical_std.164k_fs_LR.surf.gii</code>. In one instance open the resampled sulc overlay that was created by the script at  <code>./output/sub-01/amended.sub-01.L.sulc.164k_fs_LR.shape.gii</code> for subject 01 and in the other instance open the resampled sulc overlay <code>./output/sub-02/amended.sub-02.L.sulc.164k_fs_LR.shape.gii</code> for subject 02. Activate both overlays  and click on <strong>Reset</strong> if your exploration brings your spheres out of sync to bring them back to the default start. The image below uses the <strong>Surface</strong> view to compare hemispheres however you might want to experiment with the <strong>Montage</strong> view. Notice the similarity in the sulcal maps between both subjects as you explore both spheres.</li>
+<li>One dramatic way to see how features generalize across subjects is to view the sulc overlay on the sphere. Again <strong>Close all Files</strong> in your current instance of <strong>wb_view</strong>. Now open another separate instance of <strong>wb_view</strong> so that you have two copies of the program running at the same time. In both instances open the standard sphere in <code>./DATA/config/fsaverage.L_LR.spherical_std.164k_fs_LR.surf.gii</code>. In one instance open the resampled sulc overlay that was created by the script at  <code>./output/sub-01/amended.sub-01.L.sulc.164k_fs_LR.shape.gii</code> for subject 01 and in the other instance open the resampled sulc overlay <code>./output/sub-02/amended.sub-02.L.sulc.164k_fs_LR.shape.gii</code> for subject 02. Activate both overlays  and click on <strong>Reset</strong> if your exploration brings your spheres out of sync to bring them back to the default start. The image below uses the <strong>Surface</strong> view to compare hemispheres however you might want to experiment with the <strong>Montage</strong> view. Notice the similarity in the sulcal maps between both subjects as you explore both spheres. Close one of the instances of wb_view when you are ready to move on to the next task.</li>
 </ul>
 <div class="admonition information">
 <p class="admonition-title">Information</p>
@@ -290,8 +291,19 @@
 </div>
 <p><img alt="midthickness" src="../../img/003_register_compare_spheres.png" /></p>
 <ul>
-<li>Close one of the instances of wb_view when you are ready to move on to the next task.</li>
+<li>
+<p>There are a couple of better ways than the one provided above of visualizing both subjects' overlays on the <code>fsaverage.L_LR.spherical_std.164k_fs_LR.surf.gii</code> surface in one instance of <strong>wb_view</strong> that have been recommended by Tim Coalson.</p>
+</li>
+<li>
+<p>In the first approach, instead of opening two instances of wb_view you can simply open the <code>fsaverage.L_LR.spherical_std.164k_fs_LR.surf.gii</code> surface and then load in both subjects' sulc overlays <code>amended.sub-01.L.sulc.164k_fs_LR.shape.gii</code> and <code>amended.sub-02.L.sulc.164k_fs_LR.shape.gii</code>. One can then enable both overlays and then disable and enable the top one to switch between viewing the two files.</p>
+</li>
 </ul>
+<p><img alt="midthickness" src="../../img/task5_comparesurf_yoke0.png" /></p>
+<ul>
+<li>In a second approach, having loaded the <code>fsaverage.L_LR.spherical_std.164k_fs_LR.surf.gii</code> surface  and the 2 sulc overlays as described above, you can close tabs until you have only 2 showing and then use "View-&gt;Enter Tile Tabs" with camera yoking to see two spheres with different data that automatically sync what angle they are viewed at. With this approach we do not need to use "reset".</li>
+</ul>
+<p><img alt="midthickness" src="../../img/task5_comparesurf_yoke1.png" />
+<img alt="midthickness" src="../../img/task5_comparesurf_yoke2.png" /></p>
 <h2 id="task-3-project-volumetric-data-onto-a-gifti-surface">Task 3: Project volumetric data onto a GIFTI Surface</h2>
 <ul>
 <li>Run the <code>003_projection.sh</code> script through the docker image as follows:</li>
@@ -301,13 +313,13 @@
 
 <ul>
 <li>
-<p>This script uses <code>wb_command -volume-to-surface-mapping</code> to project the volumetric NIFTI-1 functional MRI data at  <code>./DATA/sub-01/MNINonLinear/Results/task-rhymejudgment/task-rhymejudgment.nii.gz</code> onto the midthickness layer you created in task 1.</p>
+<p>This script uses <code>wb_command -volume-to-surface-mapping</code> to project the volumetric NIFTI-1 functional MRI data at  <code>./DATA/sub-01/MNINonLinear/Results/task-rhymejudgment/task-rhymejudgment.nii.gz</code> between the pial and white surfaces.</p>
 </li>
 <li>
-<p>in wb_view, select <strong>File</strong> &gt; <strong>Close All Files</strong> and then  open the midthickness layer you created in task 1  <code>amended.sub-01.L.midthickness.32k_fs_LR.surf.gii</code> from <code>./output/sub-01</code> and then open the projected surface overlay  <code>sub-01.L.midthickness.32k_fs_LR.func.gii</code> which is in the same directory.</p>
+<p>in wb_view, select <strong>File</strong> &gt; <strong>Close All Files</strong> and then  open the midthickness surface you created in task 1  <code>amended.sub-01.L.midthickness.32k_fs_LR.surf.gii</code> from <code>./output/sub-01</code> and then open the projected surface overlay  <code>sub-01.L.midthickness.32k_fs_LR.func.gii</code> which is in the same directory.</p>
 </li>
 <li>
-<p>Change the file from <code>metricdynconn - sub-01....</code> to  the <code>sub-01.L.midthickness.32k_fs_LR.func.gii</code> layer in the overlay toolbox. Notice that the functional MRI has been successfully projected on the surface. You can cycle through the different volumes by clicking the time index next to the <em>Yoke</em> column in the Overlay Toolbox. Unfortunately we are little limited in what we can do with this GIFTI functional overlay in wb_view. </p>
+<p>Change the file from <code>metricdynconn - sub-01....</code> to  the <code>sub-01.L.midthickness.32k_fs_LR.func.gii</code> surface in the overlay toolbox. Notice that the functional MRI has been successfully projected on the surface. You can cycle through the different volumes by clicking the time index next to the <em>Yoke</em> column in the Overlay Toolbox. Unfortunately we are little limited in what we can do with this GIFTI functional overlay in wb_view. </p>
 </li>
 </ul>
 <p><img alt="midthickness" src="../../img/005_projection.png" /></p>
@@ -337,7 +349,7 @@
 <p>This script continues the process of projecting the volume data onto the Right midthickness surface and then samples the sub-cortical data using a sub-cortical mask that covers the key grey-matter areas of the brain. </p>
 </li>
 <li>
-<p>The script then uses <code>wb_command -cifti-create-dense-timeseries</code> to combine the data on the 2 surfaces and on the sub-cortical layer into a CIFTI file.</p>
+<p>The script then uses <code>wb_command -cifti-create-dense-timeseries</code> to combine the data on the 2 surfaces and in the sub-cortical structures into a CIFTI file.</p>
 </li>
 <li>
 <p>From <code>./output/sub-01</code> open the the left <code>amended.sub-01.L.midthickness.32k_fs_LR.surf.gii</code>and right <code>amended.sub-01.R.midthickness.32k_fs_LR.surf.gii</code> midthickness surfaces and the newly created CIFTI functional MRI overlay,  <code>created.den-91k.sub-01_rest.dtseries.nii</code>. The CIFTI functional overlay provides advantages for viewing and manipulating neuroimaging data.</p>
@@ -385,12 +397,13 @@
 <li>Create your own script and try out different <a href="https://www.humanconnectome.org/software/workbench-command">wb_commands</a></li>
 </ul>
 <h2 id="final-words">Final words</h2>
-<p>This concludes this introduction to using surface-based methods for processing data. A critical step that underpins all of the processing steps above is the creation of the initial surface meshes (<strong>white</strong>, <strong>pial</strong> etc) and overlays (<strong>sulc</strong>, <strong>thickness</strong> etc) by dedicated software like <strong>Freesurfer</strong>. Once these layers have been created then the range of processing steps described above can be accomplished using tools like <code>wb_command</code>, freesurfer modules, custom matlab or python scripts etc.</p>
+<p>This concludes this introduction to using surface-based methods for processing data. A critical step that underpins all of the processing steps above is the creation of the initial surface meshes (<strong>white</strong>, <strong>pial</strong> etc) and overlays (<strong>sulc</strong>, <strong>thickness</strong> etc) by dedicated software like <strong>Freesurfer</strong>. Once these surfaces have been created then the range of processing steps described above can be accomplished using tools like <code>wb_command</code>, freesurfer modules, custom matlab or python scripts etc.</p>
 <p>To gain more experience using <strong>wb_command</strong> then material from the 2019 <a href="https://wustl.app.box.com/v/hcp-2019-practical-08">wb_command course</a> might be useful. Online help on individual workbench commands is available <a href="https://www.humanconnectome.org/software/workbench-command">here</a>. More complex common procedures that require a sequence of different wb_command calls to implement can be called through the <a href="https://github.com/Washington-University/wb_shortcuts">wb_shortcuts</a> script.</p>
 <p>Missing from this practicum is any demonstration of how to perform group analysis using surface-based formats. An additional practicum is in development which  will attempt to cover basic group analysis on the surface using tools like <strong>film_gls</strong> and <a href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/PALM"><strong>PALM</strong></a> which are both part of the <a href="https://fsl.fmrib.ox.ac.uk/fsl/fslwiki">FSL</a> ecosystem and which have been used for the HCP's <a href="https://github.com/Washington-University/HCPpipelines/tree/master/TaskfMRIAnalysis">surface-based task analysis</a>. Development is occurring in this area quite rapidly and user-friendly tools that facilitate statistical analysis on the surface should be available soon. </p>
 <p>Please provide any corrections and suggestions by <a href="mailto:chidiugonna@arizona.edu">email</a> or as issues on <a href="https://github.com/chidiugonna/BrainSurfing">GitHub</a></p>
 <h2 id="acknowledgements">Acknowledgements</h2>
-<p>Thanks to Dianne Patterson for sharing her comprehehsive notes on <strong>wb_command</strong> which were very helpful and for providing helpful feedback on the practicum. Thanks also to Tim Coalson for directing me to the HCP's 2019 <a href="https://wustl.app.box.com/v/hcp-2019-practical-08">wb_command course</a>  which provided inspiration.</p>
+<p>Thanks to Dianne Patterson for sharing her comprehensive notes on <strong>wb_command</strong> which were very helpful and for providing helpful feedback on the practicum. Thanks also to Tim Coalson for directing me to the HCP's 2019 <a href="https://wustl.app.box.com/v/hcp-2019-practical-08">wb_command course</a>  which provided inspiration.</p>
+<p>Huge thanks to Tim Coalson for very generously spending time to clarify misconceptions I had about Surface-Based methods and for several critical corrections on use of terminology that went a long way to improving the content here. I am much indebted to him for his attention to detail and his clear, comprehensive and extremely helpful feedback.</p>
 <h2 id="references">References</h2>
 <p>Coalson, T. S., Van Essen, D. C., &amp; Glasser, M. F. (2018). <a href="https://www.pnas.org/content/115/27/E6356.short">The impact of traditional neuroimaging methods on the spatial localization of cortical areas.</a> Proceedings of the National Academy of Sciences, 115(27), E6356-E6365.</p>
 <p>Dickie, E. W., Anticevic, A., Smith, D. E., Coalson, T. S., Manogaran, M., Calarco, N., ... &amp; Voineskos, A. N. (2019). <a href="https://www.sciencedirect.com/science/article/abs/pii/S1053811919303714">ciftify: A framework for surface-based analysis of legacy MR acquisitions.</a> Neuroimage, 197, 818-826.</p>
